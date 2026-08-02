@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>오키나와 3박 4일 · 최종 일정</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{
+  --indigo:#0E2C3B; --ink:#173B4A; --lagoon:#17968F; --shallow:#8AD3CC;
+  --coral:#DE5238; --ukon:#E2A32B; --sand:#FBF7EF; --paper:#FFFFFF;
+  --line:rgba(23,59,74,.16); --line-soft:rgba(23,59,74,.09); --muted:#5D7683;
+  --disp:"Gowun Batang",serif; --body:"Pretendard Variable",Pretendard,-apple-system,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:74px}
+body{margin:0;background:var(--sand);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+/* hero */
+.hero{background:var(--indigo);color:#EAF3F2;padding:52px 0 40px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;
+  background:linear-gradient(90deg,var(--ukon) 0 25%,var(--lagoon) 25% 50%,var(--coral) 50% 75%,var(--shallow) 75% 100%)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--shallow);margin:0 0 18px}
+.hero h1{font-family:var(--disp);font-weight:700;font-size:clamp(36px,6.5vw,58px);line-height:1.12;margin:0 0 14px}
+.hero .sub{color:#A9C6C9;max-width:44ch;margin:0 0 32px;font-size:15.5px}
+.hero .sub b{color:#EAF3F2;font-weight:600}
+.legs{display:grid;gap:1px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.14)}
+.leg{background:var(--indigo);display:grid;grid-template-columns:100px 1fr;gap:18px;padding:15px 18px;align-items:center}
+.leg .lab{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--shallow)}
+.leg .route{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.leg .t{font-family:var(--mono);font-size:20px;font-weight:500;color:#fff}
+.leg .code{font-family:var(--mono);font-size:12px;color:#A9C6C9;letter-spacing:.08em}
+.leg .dash{flex:1;min-width:30px;height:1px;background:rgba(255,255,255,.28);position:relative;top:-5px}
+.leg .fl{font-family:var(--mono);font-size:11.5px;color:#7FA3AB}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;background:rgba(251,247,239,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav ul{list-style:none;display:flex;gap:2px;margin:0;padding:0;overflow-x:auto;scrollbar-width:none}
+nav ul::-webkit-scrollbar{display:none}
+nav a{display:block;padding:15px 13px;font-size:13.5px;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:.18s}
+nav a .n{font-family:var(--mono);font-size:11px;color:var(--lagoon);margin-right:7px}
+nav a:hover{color:var(--ink)}
+nav a.on{color:var(--ink);border-bottom-color:var(--coral);font-weight:600}
+
+/* legend */
+.legend{padding:26px 0 0}
+.legend .box{background:var(--paper);border:1px solid var(--line-soft);padding:16px 20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center}
+.legend h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--muted);margin:0;text-transform:uppercase;flex-basis:100%}
+.lg{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted)}
+.load{display:inline-flex;gap:3px;vertical-align:middle}
+.load i{width:11px;height:5px;background:var(--line);display:block;border-radius:1px}
+.load[data-load="1"] i:nth-child(-n+1),.load[data-load="2"] i:nth-child(-n+2),.load[data-load="3"] i:nth-child(-n+3){background:var(--coral)}
+
+/* map */
+section.block,section.day{padding:44px 0 8px}
+.blockhead,.dayhead{border-top:2px solid var(--ink);padding-top:16px;margin-bottom:24px}
+.dayhead{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end}
+.blockhead .no,.dayhead .no{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--coral);display:block;margin-bottom:6px}
+.blockhead h2,.dayhead h2{font-family:var(--disp);font-weight:700;font-size:clamp(23px,4vw,31px);margin:0 0 6px}
+.dayhead .date{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.daystat{text-align:right;font-size:12px;color:var(--muted);line-height:1.9}
+.daystat .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--lagoon);margin-right:8px}
+
+.mapbox{background:var(--paper);border:1px solid var(--line-soft);padding:20px}
+#okmap{width:100%;height:580px;border:1px solid var(--line-soft);background:#DDE6E4}
+.pin{width:24px;height:24px;border-radius:50%;color:#fff;font-family:var(--mono);font-size:11px;
+  font-weight:500;display:flex;align-items:center;justify-content:center;border:2px solid #fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.pin.sq{border-radius:4px;width:26px;height:26px;background:#0E2C3B}
+.leaflet-popup-content{font-family:var(--body);font-size:13.5px;margin:12px 14px;line-height:1.6}
+.leaflet-popup-content b{display:block;font-size:14.5px;margin-bottom:3px}
+.leaflet-popup-content em{font-family:var(--mono);font-style:normal;font-size:11px;
+  letter-spacing:.08em;color:var(--lagoon);display:block;margin-bottom:5px}
+.leaflet-container{font-family:var(--body)}
+.maplegend{display:flex;gap:20px;flex-wrap:wrap;margin:16px 0 0;font-size:13px;color:var(--muted);justify-content:center}
+.maplegend span{display:flex;align-items:center;gap:7px}
+.maplegend b{width:22px;height:3px;display:block;border-radius:2px}
+.mapnote{font-size:12.5px;color:var(--muted);text-align:center;margin:14px 0 0}
+
+.dirlinks{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:18px}
+.dirlinks a{display:block;background:var(--sand);border:1px solid var(--line-soft);padding:12px 14px;text-decoration:none;color:var(--ink);font-size:13.5px;transition:.15s}
+.dirlinks a:hover{border-color:var(--lagoon)}
+.dirlinks a span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--lagoon);margin-bottom:3px}
+
+/* timeline */
+.tl{border-left:1px solid var(--line);margin-left:64px}
+.stop{padding:0 0 22px 24px;position:relative}
+.stop .when{position:absolute;left:-64px;top:1px;width:52px;text-align:right;font-family:var(--mono);font-size:12.5px;color:var(--ink)}
+.stop::before{content:"";position:absolute;left:-4.5px;top:8px;width:8px;height:8px;border-radius:50%;background:var(--sand);border:1.5px solid var(--lagoon)}
+.stop.key::before{background:var(--coral);border-color:var(--coral)}
+.stop h4{margin:0 0 5px;font-size:16.5px;font-weight:600;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stop p{margin:0;font-size:14px;color:var(--muted);max-width:62ch}
+.stop .foot{margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:3px 7px;border:1px solid currentColor;border-radius:2px;line-height:1.4}
+.t-sea{color:var(--lagoon)} .t-in{color:#5E7C8C} .t-opt{color:var(--ukon)} .t-eat{color:var(--coral)}
+.t-me{color:var(--lagoon)} .t-par{color:#7A5BA8}
+.drive{padding:0 0 22px 24px;position:relative}
+.drive::before{content:"";position:absolute;left:-3.5px;top:7px;width:6px;height:6px;background:var(--sand);border:1px dashed var(--muted);border-radius:50%}
+.drive span{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.note{margin:6px 0 26px 64px;padding:14px 16px;background:rgba(23,150,143,.07);border-left:2px solid var(--lagoon);font-size:13.5px;max-width:64ch}
+.note b{font-weight:600}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:16px}
+.card{background:var(--paper);border:1px solid var(--line-soft);padding:20px}
+.card .kick{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--lagoon);text-transform:uppercase;margin:0 0 10px}
+.card h4{margin:0 0 6px;font-size:15.5px;font-weight:600}
+.card p{margin:0;font-size:13.5px;color:var(--muted)}
+.card ul{margin:8px 0 0;padding-left:17px;font-size:13.5px;color:var(--muted)}
+.card li{margin-bottom:5px}
+.card li b{color:var(--ink);font-weight:600}
+.check{background:var(--paper);border:1px solid var(--line-soft)}
+.check .row{display:grid;grid-template-columns:140px 1fr;gap:18px;padding:15px 20px;border-bottom:1px solid var(--line-soft);font-size:14px}
+.check .row:last-child{border-bottom:0}
+.check .row .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--lagoon);padding-top:3px}
+.check .row .v{color:var(--muted)}
+.check .row .v b{color:var(--ink);font-weight:600}
+
+footer{margin-top:56px;border-top:1px solid var(--line);padding:24px 0 60px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+@media(max-width:640px){
+  .tl{margin-left:0}
+  .stop,.drive{padding-left:18px}
+  .stop .when{position:static;text-align:left;width:auto;display:block;margin-bottom:3px;color:var(--lagoon)}
+  .note{margin-left:0}
+  .leg{grid-template-columns:1fr;gap:8px}
+  .dayhead{grid-template-columns:1fr}
+  .daystat{text-align:left}
+  .check .row{grid-template-columns:1fr;gap:4px}
+}
+@media print{
+  nav{display:none} body{background:#fff} .hero{background:#fff;color:#173B4A}
+  .hero h1,.hero .sub b{color:#173B4A} .leg{background:#fff} .leg .t{color:#173B4A}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">2026.09.27 – 09.30 · 3박 4일 · 4인 · 렌터카</p>
+    <h1>천천히 가는<br>오키나와</h1>
+    <p class="sub">요미탄 2박 + 나하 1박. 첫날 공항에서 올라가는 길에 <b>챠탄</b>을 들르고, 마지막 밤은 <b>국제거리</b>에 묵어 공항까지 20분으로 줄였습니다. 푸른 동굴은 <b>2일차 아침</b>이라 체크아웃 날 두 팀으로 갈라지지 않습니다.</p>
+    <div class="legs">
+      <div class="leg">
+        <div class="lab">가는 날 09.27 (일)</div>
+        <div class="route"><span class="t">08:00</span><span class="code">ICN 인천</span><span class="dash"></span><span class="t">10:30</span><span class="code">OKA 나하</span><span class="fl">ZE633 · 2h30m</span></div>
+      </div>
+      <div class="leg">
+        <div class="lab">오는 날 09.30 (수)</div>
+        <div class="route"><span class="t">11:30</span><span class="code">OKA 나하</span><span class="dash"></span><span class="t">14:05</span><span class="code">ICN 인천</span><span class="fl">ZE634 · 2h35m</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <ul>
+      <li><a href="#map">동선 지도</a></li>
+      <li><a href="#d1"><span class="n">D1</span>도착 · 챠탄 · 만좌모</a></li>
+      <li><a href="#d2"><span class="n">D2</span>푸른 동굴 · 북부</a></li>
+      <li><a href="#d3"><span class="n">D3</span>요미탄 → 나하</a></li>
+      <li><a href="#d4"><span class="n">D4</span>귀국</a></li>
+      <li><a href="#stay">숙소</a></li>
+      <li><a href="#prep">예약 · 준비</a></li>
+      <li><a href="#plusa">비상 대안</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="legend">
+    <div class="box">
+      <h3>표시 읽는 법</h3>
+      <span class="lg"><span class="load" data-load="1"><i></i><i></i><i></i></span> 앉아서</span>
+      <span class="lg"><span class="load" data-load="2"><i></i><i></i><i></i></span> 평지 20~30분</span>
+      <span class="lg"><span class="load" data-load="3"><i></i><i></i><i></i></span> 계단·모래·물놀이</span>
+      <span class="lg"><span class="tag t-opt">선택</span> 빼도 되는 일정</span>
+      <span class="lg"><span class="tag t-me">동생</span> <span class="tag t-par">부모님</span> 따로 움직이는 시간</span>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <section class="block" id="map">
+    <div class="blockhead">
+      <span class="no">ROUTE</span>
+      <h2>4일간의 동선</h2>
+    </div>
+    <div class="mapbox">
+      <div id="okmap" role="application" aria-label="오키나와 방문지 지도"></div>
+
+      <div class="maplegend">
+        <span><b style="background:#E2A32B"></b> 1일차</span>
+        <span><b style="background:#17968F"></b> 2일차</span>
+        <span><b style="background:#DE5238"></b> 3일차</span>
+        <span><b style="background:#5D7683"></b> 4일차</span>
+      </div>
+      <p class="mapnote">마커를 누르면 시간과 설명이 나옵니다. 연결선은 직선 표시이니, 실제 도로 경로는 아래 날짜별 버튼으로 확인하세요. 지도를 보려면 인터넷 연결이 필요합니다.</p>
+
+      <div class="dirlinks">
+        <a href="https://www.google.com/maps/dir/?api=1&origin=26.2001297,127.6466452&destination=26.5052353,127.8504781&waypoints=26.1766603,127.6404367%7C26.3158768,127.7540067%7C26.3877,127.7398&travelmode=driving" target="_blank" rel="noopener"><span>DAY 1</span>구글 지도로 경로 열기</a>
+        <a href="https://www.google.com/maps/dir/?api=1&origin=26.3877,127.7398&destination=26.3877,127.7398&waypoints=26.6920917,127.8801006%7C26.7015874,127.8802247%7C26.6865208,128.0172722&travelmode=driving" target="_blank" rel="noopener"><span>DAY 2</span>구글 지도로 경로 열기</a>
+        <a href="https://www.google.com/maps/dir/?api=1&origin=26.3877,127.7398&destination=26.2180,127.6862&waypoints=26.5910,127.9793&travelmode=driving" target="_blank" rel="noopener"><span>DAY 3</span>구글 지도로 경로 열기</a>
+        <a href="https://www.google.com/maps/dir/?api=1&origin=26.2155,127.6885&destination=26.2001297,127.6466452&waypoints=26.2196,127.6683&travelmode=driving" target="_blank" rel="noopener"><span>DAY 4</span>구글 지도로 경로 열기</a>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:16px">
+      <div class="card">
+        <p class="kick">이번 판의 뼈대</p>
+        <h4>남 → 북 → 남</h4>
+        <p>첫날 공항에서 올라가며 챠탄을 처리하고, 2일차에 북부 끝을 찍고, 3일차는 나고에 잠깐 들렀다가 나하까지 한 번에 내려옵니다.</p>
+      </div>
+      <div class="card">
+        <p class="kick">숙소 위치의 이유</p>
+        <h4>요미탄은 챠탄과 온나 사이</h4>
+        <p>호텔 무라사키무라 기준으로 마에다곶(푸른 동굴) 15분, 챠탄 30분, 만좌모 30분, 츄라우미 1시간 20분. 푸른 동굴이 가까운 게 2일차 아침에 크게 작용합니다.</p>
+      </div>
+      <div class="card">
+        <p class="kick">마지막 밤은 나하</p>
+        <h4>아침 한 시간을 벌기 위해</h4>
+        <p>요미탄에서 공항까지 55분, 나하 시내에서는 20분. 9시 반까지 공항에 가야 하니 이 차이가 기상 시간을 바꿉니다. 국제거리·공설시장도 걸어서 갑니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY 1 -->
+  <section class="day" id="d1">
+    <div class="dayhead">
+      <div>
+        <span class="no">DAY 01</span>
+        <h2>공항에서 북쪽으로, 해를 따라가며</h2>
+        <p class="date">9월 27일 (일) · 나하 → 챠탄 → 요미탄 → 만좌모</p>
+      </div>
+      <div class="daystat">
+        <div><span class="k">운전</span>2시간 15분</div>
+        <div><span class="k">부담</span><span class="load" data-load="2"><i></i><i></i><i></i></span></div>
+      </div>
+    </div>
+    <div class="tl">
+      <div class="stop key"><div class="when">10:30</div>
+        <h4>나하공항 도착 · 렌터카 수속</h4>
+        <p>1층에서 렌터카 회사 셔틀 탑승. 영업소 이동과 계약에 40~60분 걸리니 실제 출발은 11시 40분쯤입니다. 4인 + 캐리어 4개면 미니밴급이 안전해요.</p>
+        <div class="foot"><span class="load" data-load="1"><i></i><i></i><i></i></span></div></div>
+
+      <div class="drive"><span>이동 · 10분</span></div>
+
+      <div class="stop key"><div class="when">11:55</div>
+        <h4>세나가지마 우미카지 테라스 <span class="tag t-eat">점심</span></h4>
+        <p>공항 옆 언덕에 하얀 상가가 이어진 곳. 머리 위로 비행기가 낮게 지나갑니다. 위쪽 주차장에 대면 내려가면서 구경할 수 있어요. 첫 끼는 가볍게, 오래 앉지 말고 1시간 15분 안에 정리합니다.</p>
+        <div class="foot"><span>1시간 15분</span><span class="load" data-load="2"><i></i><i></i><i></i></span></div></div>
+
+      <div class="drive"><span>이동 · 35분 (58번 국도, 바다를 오른쪽에 두고 북상)</span></div>
+
+      <div class="stop key"><div class="when">13:45</div>
+        <h4>아메리칸 빌리지 · 선셋 비치</h4>
+        <p>관람차와 원색 건물이 모인 챠탄의 상가 지구. 숙소로 가는 길목이라 첫날에 붙였습니다. 방파제 산책로가 평탄해 부모님 걷기에 부담이 없고, 카페에 앉아 쉬기도 좋습니다. 짐은 차에 두고 가볍게 돌아요.</p>
+        <div class="foot"><span>2시간 15분</span><span class="load" data-load="2"><i></i><i></i><i></i></span></div></div>
+
+      <div class="drive"><span>이동 · 30분 (챠탄 → 요미탄)</span></div>
+
+      <div class="stop key"><div class="when">16:30</div>
+        <h4>호텔 무라사키무라 체크인</h4>
+        <p>여기서 2박. 3일차 오전까지 짐을 그대로 둡니다. 붉은 기와 지붕의 저층 건물이라 계단이 적고, 주차는 무료입니다. 잠깐 쉬었다가 일몰 보러 나가요.</p>
+        <div class="foot"><span class="load" data-load="1"><i></i><i></i><i></i></span></div></div>
+
+      <div class="drive"><span>이동 · 30분 (요미탄 → 만좌모)</span></div>
+
+      <div class="stop"><div class="when">17:50</div>
+        <h4>만좌모 일몰</h4>
+        <p>코끼리 코 모양 절벽으로, 평탄한 포장길 왕복 20분이면 충분합니다. 이 시기 일몰은 18시 30분 전후예요. 해가 완전히 떨어지기 전에 나오면 주차장이 덜 막힙니다.</p>
+        <div class="foot"><span>1시간 10분</span><span class="load" data-load="2"><i></i><i></i><i></i></span></div></div>
+
+      <div class="drive"><span>이동 · 30분</span></div>
+
+      <div class="stop"><div class="when">19:30</div>
+        <h4>아구 돼지 샤브샤브 <span class="tag t-eat">저녁</span></h4>
+        <p>오키나와 흑돼지 육수 샤브. 기름기가 적어 부모님 입맛에 무난합니다. 요미탄·온나 쪽에 지점이 여럿 있으니 숙소에서 가까운 곳으로 예약해두세요. 첫날 운전 후라 술은 숙소에서.</p></div>
+    </div>
+
+    <div class="note"><b>첫날에 챠탄을 넣은 이유.</b> 공항에서 요미탄으로 올라가는 길 위에 그대로 있어서 추가 운전이 5분뿐입니다. 대신 선셋 비치의 일몰 대신 만좌모의 일몰을 보게 되는데, 절벽에서 보는 쪽이 첫날 기억으로는 더 세게 남습니다.</div>
+  </section>
+
+  <!-- DAY 2 -->
+  <section class="day" id="d2">
+    <div class="dayhead">
+      <div>
+        <span class="no">DAY 02</span>
+        <h2>동굴, 수족관, 그리고 코우리까지</h2>
+        <p class="date">9월 28일 (월) · 체크아웃 없음 · 가장 긴 날</p>
+      </div>
+      <div class="daystat">
+        <div><span class="k">운전</span>3시간 40분</div>
+        <div><span class="k">부모님</span>10:20 – 19:15</div>
+        <div><span class="k">부담</span><span class="load" data-load="3"><i></i><i></i><i></i></span></div>
+      </div>
+    </div>
+    <div class="tl">
+      <div class="stop"><div class="when">07:15</div>
+        <h4>투어사 픽업 <span class="tag t-me">동생</span></h4>
+        <p>숙소에서 마에다곶까지 7.7km, 차로 15분입니다. 픽업이 안 되는 업체라면 자차로 다녀와도 부모님 일정에 영향이 없어요. 호텔 조식은 7시부터라 나가기 전에 간단히 먹을 수 있습니다.</p></div>
+
+      <div class="stop key"><div class="when">08:00</div>
+        <h4>푸른 동굴 보트 투어 <span class="tag t-sea">수영</span> <span class="tag t-me">동생</span></h4>
+        <p>첫 타임이라 물이 가장 맑고 사람이 적습니다. 샤워와 환복까지 2시간. 파도가 높으면 당일 결항될 수 있어요.</p>
+        <div class="foot"><span class="load" data-load="3"><i></i><i></i><i></i></span></div></div>
+
+      <div class="stop"><div class="when">08:00</div>
+        <h4>조식 후 방에서 대기 <span class="tag t-par">부모님</span></h4>
+        <p>체크아웃이 없는 날이라 짐 쌀 일도, 로비에서 기다릴 일도 없습니다. 이 배치의 핵심이에요.</p>
+        <div class="foot"><span class="load" data-load="1"><i></i><i></i><i></i></span></div></div>
+
+      <div class="stop key"><div class="when">10:20</div>
+        <h4>숙소에서 합류 · 출발</h4></div>
+
+      <div class="drive"><span>이동 · 1시간 20분 (요미탄 → 해양박공원, 오키나와 자동차도로 경유)</span></div>
+
+      <div class="stop key"><div class="when">11:45</div>
+        <h4>츄라우미 수족관 <span class="tag t-in">실내</span></h4>
+        <p>위층에서 아래로 내려오는 구조라 오르막이 없고 앉을 자리가 많습니다. 대수조 앞 벤치에서 20분 앉아 보는 게 하이라이트. 야외 돌고래 쇼는 무료이고 20분입니다.</p>
+        <div class="foot"><span>2시간</span><span class="load" data-load="2"><i></i><i></i><i></i></span></div></div>
+
+      <div class="stop"><div class="when">13:50</div>
+        <h4>공원 내 점심 <span class="tag t-eat">점심</span></h4>
+        <p>40분. 모토부 소바집까지 나가면 뒤가 다 밀립니다.</p></div>
+
+      <div class="stop key"><div class="when">14:35</div>
+        <h4>에메랄드 비치 <span class="tag t-sea">수영</span></h4>
+        <p>같은 공원 안이라 차를 옮기지 않습니다. 무료 개방, 샤워·탈의실 완비, 해파리 방지망 안쪽에서 수영. 동생은 아침에 이미 물에 들어갔으니 부모님이 발 담그고 쉬는 시간으로 써도 좋아요.</p>
+        <div class="foot"><span>55분</span><span class="load" data-load="3"><i></i><i></i><i></i></span></div></div>
+
+      <div class="stop"><div class="when">15:45</div>
+        <h4>비세 후쿠기 나무길</h4>
+        <p>차로 5분. 방풍림이 터널처럼 이어지는 평지 마을길입니다. 물소 수레 20분이면 걷지 않고 한 바퀴 돕니다.</p>
+        <div class="foot"><span>40분</span><span class="load" data-load="2"><i></i><i></i><i></i></span></div></div>
+
+      <div class="drive"><span>이동 · 40분 (비세 → 코우리)</span></div>
+
+      <div class="stop key"><div class="when">17:05</div>
+        <h4>코우리 대교 · 코우리 비치</h4>
+        <p>바다 한가운데를 가르는 2km 다리. 건너편 주차장에서 사진만 찍고 돌아 나옵니다. 오후 5시대 빛이 가장 좋을 때예요.</p>
+        <div class="foot"><span>35분</span><span class="load" data-load="1"><i></i><i></i><i></i></span></div></div>
+
+      <div class="drive"><span>이동 · 1시간 35분. 18시 30분경 58번 국도에서 서쪽 바다로 지는 해를 보며 달립니다</span></div>
+
+      <div class="stop"><div class="when">19:30</div>
+        <h4>요미탄 저녁 <span class="tag t-eat">저녁</span></h4>
+        <p>도착이 늦으니 숙소에서 가까운 곳으로 미리 예약해두세요. 나고를 지나면 식당이 뜸해지니 중간에 세우지 말고 곧장 오는 편이 낫습니다. 숙소 대욕장은 밤 10시 반까지라 돌아와서 몸을 풀 수 있어요.</p></div>
+    </div>
+
+    <div class="note"><b>시간이 밀리면 비세 나무길을 먼저 버리세요.</b> 코우리보다 대체하기 쉽고, 3일차 오전이 비어 있어 요미탄 쪽에서 비슷한 산책으로 메울 수 있습니다.</div>
+  </section>
+
+  <!-- DAY 3 -->
+  <section class="day" id="d3">
+    <div class="dayhead">
+      <div>
+        <span class="no">DAY 03</span>
+        <h2>맥주 한 잔 하고 나하까지 내려오기</h2>
+        <p class="date">9월 29일 (화) · 요미탄 → 나고 → 나하</p>
+      </div>
+      <div class="daystat">
+        <div><span class="k">운전</span>2시간 50분</div>
+        <div><span class="k">부담</span><span class="load" data-load="2"><i></i><i></i><i></i></span></div>
+      </div>
+    </div>
+    <div class="tl">
+      <div class="stop"><div class="when">07:30</div>
+        <h4>조식 · 짐 정리</h4>
+        <p>나고까지 올라갔다 내려오는 날이라 이 날만 아침을 조금 서두릅니다. 짐은 전날 밤에 싸두세요.</p></div>
+
+      <div class="stop"><div class="when">08:30</div>
+        <h4>체크아웃</h4></div>
+
+      <div class="drive"><span>이동 · 1시간 10분 (요미탄 → 나고, 오키나와 자동차도로)</span></div>
+
+      <div class="stop key"><div class="when">09:45</div>
+        <h4>오리온 해피파크 공장 견학 <span class="tag t-in">실내</span></h4>
+        <p>10시 타임으로 예약해두세요. 견학 35분 + 시음 20분으로 약 1시간입니다. 원료 분쇄부터 캔 주입까지 라인을 따라 걷고, 끝나면 갓 뽑은 생맥주 두 잔을 줍니다. 운전자와 미성년자는 무알코올·음료로 바꿔줍니다. 가이드는 일본어지만 한국어 안내서가 있어요. 무료이고 주차도 무료, 기념품 숍은 현금만 받습니다.</p>
+        <div class="foot"><span>1시간 15분</span><span class="load" data-load="2"><i></i><i></i><i></i></span></div></div>
+
+      <div class="drive"><span>이동 · 1시간 40분 (나고 → 나하 시내, 고속도로 통행료 약 1,300엔)</span></div>
+
+      <div class="stop"><div class="when">12:45</div>
+        <h4>나하 도착 · 주차하고 짐 맡기기 <span class="tag t-opt">숙소 미정</span></h4>
+        <p>체크인 시간 전이면 프런트에 짐만 맡기고 나갑니다. 차는 여기서 세운 뒤 다음 날 아침까지 꺼내지 않아요. 이후 일정은 전부 도보입니다.</p>
+        <div class="foot"><span class="load" data-load="1"><i></i><i></i><i></i></span></div></div>
+
+      <div class="stop key"><div class="when">13:00</div>
+        <h4>마키시 공설시장 <span class="tag t-eat">점심</span></h4>
+        <p>1층은 생선·정육, 2층은 그 재료를 바로 요리해주는 식당가입니다. 형광색 열대어와 돼지 얼굴이 나란히 놓여 있는 풍경이 오키나와에서 제일 낯설고 재미있는 장면이에요. 1층에서 고른 재료를 2층으로 올려 요리해달라고 할 수 있으니, 구경과 점심을 한 번에 끝냅니다. 조리비는 1인당 500~700엔 정도 별도예요.</p>
+        <div class="foot"><span>1시간 30분</span><span class="load" data-load="2"><i></i><i></i><i></i></span></div></div>
+
+      <div class="stop key"><div class="when">14:40</div>
+        <h4>체크인 · 휴식</h4>
+        <p>전날 북부를 돌고 이 날 오전에 나고까지 다녀왔으니 여기서 한 번 눕습니다. 저녁까지 1시간 반 정도 여유가 있어요.</p>
+        <div class="foot"><span class="load" data-load="1"><i></i><i></i><i></i></span></div></div>
+
+      <div class="stop"><div class="when">16:15</div>
+        <h4>쓰보야 야치문 거리 <span class="tag t-opt">선택</span></h4>
+        <p>국제거리 남쪽 끝에서 도보 5분. 돌길 양옆으로 도자기 공방과 가게가 이어지는 조용한 골목입니다. 관광객이 몰리는 큰길과 분위기가 완전히 달라요. 평지이고 한 바퀴 40분이면 충분합니다. 그릇을 하나 사면 기념품으로 남기 좋습니다.</p>
+        <div class="foot"><span>45분</span><span class="load" data-load="2"><i></i><i></i><i></i></span></div></div>
+
+      <div class="stop key"><div class="when">17:10</div>
+        <h4>국제거리 · 헤이와도리 아케이드</h4>
+        <p>쓰보야에서 그대로 이어집니다. 1.6km 직선이라 다 걸을 필요 없이 절반만 왕복해도 충분해요. 헤이와도리는 지붕이 있어 소나기가 와도 괜찮습니다. <b>기념품은 여기서 다 해결됩니다.</b> 베니이모 타르트, 친스코, 시콰사, 아와모리 모두 있고 시식을 시켜주는 가게가 많아요. 사타안다기와 블루씰 아이스크림도 여기서.</p>
+        <div class="foot"><span class="load" data-load="2"><i></i><i></i><i></i></span></div></div>
+
+      <div class="stop"><div class="when">19:15</div>
+        <h4>마지막 저녁 · 스테이크 <span class="tag t-eat">저녁</span></h4>
+        <p>오키나와는 스테이크 문화가 발달한 동네고, 국제거리 주변에 노포가 몰려 있습니다. 걸어서 갈 수 있으니 반주를 해도 됩니다. 인기 있는 곳은 예약이 안전해요.</p></div>
+    </div>
+
+    <div class="note"><b>오전은 운전, 오후는 전부 도보.</b> 나고가 요미탄에서 북쪽으로 1시간 10분이라 남쪽으로 내려가기 전에 한 번 거슬러 올라갔다 옵니다. 대신 12시 45분에 차를 세운 뒤로는 다음 날 아침까지 꺼내지 않고, 시장·쓰보야·국제거리·저녁이 모두 걸어서 닿습니다. 그래서 <b>숙소는 국제거리 도보권</b>이어야 합니다. 주차는 코인파킹을 쓰더라도 <b>"入庫後24時間 最大"</b>로 상한이 걸린 곳을 고르세요. 자정 기준으로 리셋되는 곳은 요금이 두 배가 됩니다.</div>
+  </section>
+
+  <!-- DAY 4 -->
+  <section class="day" id="d4">
+    <div class="dayhead">
+      <div>
+        <span class="no">DAY 04</span>
+        <h2>바다 한 번 더 보고 귀국</h2>
+        <p class="date">9월 30일 (수) · 나하 → 나하공항</p>
+      </div>
+      <div class="daystat">
+        <div><span class="k">운전</span>25분</div>
+        <div><span class="k">부담</span><span class="load" data-load="1"><i></i><i></i><i></i></span></div>
+      </div>
+    </div>
+    <div class="tl">
+      <div class="stop"><div class="when">07:30</div>
+        <h4>조식 · 짐 정리</h4>
+        <p>공항까지 20분이라 이 날은 서두를 일이 없습니다. 짐은 전날 밤에 미리 싸두세요.</p></div>
+
+      <div class="stop"><div class="when">08:20</div>
+        <h4>체크아웃 · 출발</h4>
+        <p>출근 시간대라 시내 도로가 조금 밀립니다. 10분 여유를 뒀어요.</p></div>
+
+      <div class="stop"><div class="when">08:35</div>
+        <h4>나미노우에 궁 · 나미노우에 비치 <span class="tag t-opt">선택</span></h4>
+        <p>공항 가는 길목에 있는, 절벽 위에 올라앉은 신사와 그 아래 작은 해변입니다. 차에서 내려 20분이면 마지막으로 바다를 한 번 더 봅니다. 시간이 빠듯하면 그냥 지나쳐도 됩니다.</p>
+        <div class="foot"><span>20분</span><span class="load" data-load="1"><i></i><i></i><i></i></span></div></div>
+
+      <div class="drive"><span>이동 · 15분 (도중 주유)</span></div>
+
+      <div class="stop key"><div class="when">09:15</div>
+        <h4>주유 후 렌터카 반납</h4>
+        <p>대부분 만탱크 반납 조건입니다. 반납 후 셔틀로 공항까지 15~20분.</p></div>
+
+      <div class="stop key"><div class="when">09:45</div>
+        <h4>나하공항 국제선 체크인</h4>
+        <p>출발 1시간 45분 전. 3층에서 마지막 기념품과 식사가 가능합니다.</p></div>
+
+      <div class="stop key"><div class="when">11:30</div>
+        <h4>ZE634 출발 → 14:05 인천 도착</h4></div>
+    </div>
+  </section>
+
+  <!-- STAY -->
+  <section class="block" id="stay">
+    <div class="blockhead"><span class="no">STAY</span><h2>숙소 2 + 1</h2></div>
+    <div class="grid">
+      <div class="card">
+        <p class="kick">1·2박 · 요미탄</p>
+        <h4>호텔 무라사키무라</h4>
+        <p>확정. 요미탄 다카시호, 붉은 기와의 저층 건물입니다. 주차 무료, 대욕장 있음(평일 17:00~22:30), 조식은 07:00~09:00 별도 요금. 푸른 동굴이 있는 마에다곶까지 15분, 잔파곶 10분, 챠탄 30분.</p>
+        <ul>
+          <li>객실이 39개뿐이라 <b>빨리 잡아야</b> 합니다</li>
+          <li>4인 한 방이 되는지, 침대 구성이 어떤지 확인</li>
+          <li>2일차 저녁이 늦으니 대욕장 마감 시간 참고</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="kick">3박 · 나하 (미정)</p>
+        <h4>국제거리 도보권으로</h4>
+        <p>3일차 12시 45분 이후 일정이 전부 도보입니다. <b>겐초마에역~마키시역 사이</b>가 조건에 맞습니다.</p>
+        <ul>
+          <li><b>하얏트 리젠시 나하</b> — 국제거리 뒤편, 수영장 있음</li>
+          <li><b>더블트리 바이 힐튼 나하</b> — 국제거리 중심, 가성비</li>
+          <li>주차는 유료 코인파킹으로 해결해도 됩니다. 17시간 세워 1,500~2,000엔 수준</li>
+          <li>서쪽(쿠모지)에 잡으면 4일차 나미노우에도 걸어갈 수 있습니다</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="kick">예약할 때</p>
+        <h4>확인할 것</h4>
+        <ul>
+          <li>4인 한 방 vs 2인 두 방 — 침대 크기와 추가 침구</li>
+          <li>나하 시내는 <b>주차 유료·별도</b>가 흔하니 반드시 확인</li>
+          <li>수영장 운영 기간 — 9월 말은 대부분 정상 운영</li>
+          <li>9월은 태풍 가능성이 있으니 <b>무료 취소 조건</b>으로</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREP -->
+  <section class="block" id="prep">
+    <div class="blockhead"><span class="no">PREP</span><h2>미리 예약하고 챙길 것</h2></div>
+    <div class="check">
+      <div class="row"><div class="k">푸른 동굴</div><div class="v"><b>8시 첫 타임</b>으로 잡으세요. 요미탄 다카시호가 <b>픽업 범위</b>인지 예약할 때 물어보고, 안 되면 자차로 15분이라 직접 가도 됩니다. 어느 쪽이든 부모님은 방에 그대로 계십니다.</div></div>
+      <div class="row"><div class="k">호텔</div><div class="v">무라사키무라는 객실이 39개라 조기 마감됩니다. <b>조식 포함 여부</b>와 4인 객실 가능 여부를 먼저 확인하세요.</div></div>
+      <div class="row"><div class="k">오리온 견학</div><div class="v"><b>사전 예약 필수</b>입니다(홈페이지·전화). 3일차 <b>10시 타임</b>으로 잡으세요. 매주 <b>수·목요일과 일본 공휴일 휴무</b>인데 9월 29일은 화요일이라 괜찮습니다. 인기가 있어 조기 마감되니 2주 전에는 잡아두세요. 무료, 약 60분, 기념품 숍은 현금만.</div></div>
+      <div class="row"><div class="k">츄라우미</div><div class="v">입장권을 편의점 단말기나 온라인으로 미리 사두면 매표 줄을 건너뜁니다. 2일차는 여유가 20~30분뿐이라 이게 큽니다.</div></div>
+      <div class="row"><div class="k">물소 수레</div><div class="v">비세 나무길 수레는 예약해두면 대기가 없습니다.</div></div>
+      <div class="row"><div class="k">저녁</div><div class="v">1일차 <b>19시 30분</b>(요미탄), 2일차 <b>19시 30분</b>(숙소 근처), 3일차 <b>19시 15분</b>(국제거리 스테이크)로 미리 잡아두세요.</div></div>
+      <div class="row"><div class="k">공설시장</div><div class="v">3일차 <b>점심</b>으로 갑니다. 1층에서 고른 생선이나 고기를 2층 식당으로 올려 요리해주는 방식이고, 조리비가 1인당 500~700엔 별도입니다. 현금이 편해요.</div></div>
+      <div class="row"><div class="k">운전</div><div class="v"><b>국제운전면허증</b>이 반드시 필요합니다. 한국 면허증 원본과 여권도 지참. 좌측통행·우핸들이라 교차로 우회전에 특히 주의하세요.</div></div>
+      <div class="row"><div class="k">차량</div><div class="v">4인 + 캐리어 4개면 미니밴급. 고속도로는 현금 차로 이용 가능하고 ETC 카드는 필수가 아닙니다.</div></div>
+      <div class="row"><div class="k">태풍</div><div class="v">항공·숙소·투어 모두 변경 가능한 조건으로 잡고 여행자보험을 들어두세요.</div></div>
+      <div class="row"><div class="k">바다</div><div class="v">아쿠아슈즈(산호에 발 베임 방지), 래시가드, 큰 수건, 차량용 방수 가방. 9월 말 수온은 27~28도입니다.</div></div>
+      <div class="row"><div class="k">부모님</div><div class="v">평소 드시는 약, 상비약, 편한 신발, 모자. 매일 한 번은 숙소로 돌아와 쉬는 시간을 넣어뒀습니다.</div></div>
+      <div class="row"><div class="k">결제</div><div class="v">주차장과 소규모 식당은 현금만 받는 곳이 있어 엔화를 조금 준비. 공설시장도 현금이 편합니다.</div></div>
+    </div>
+  </section>
+
+  <!-- PLAN B -->
+  <section class="block" id="plusa">
+    <div class="blockhead"><span class="no">PLAN B</span><h2>비 오거나 결항되면</h2></div>
+    <div class="grid">
+      <div class="card">
+        <p class="kick">푸른 동굴 결항</p>
+        <h4>2일차 아침이 비면</h4>
+        <p>부모님과 함께 조식을 느긋하게 하고 8시 45분에 출발하세요. 북부를 일찍 시작하면 나키진 성터까지 넣을 수 있습니다.</p>
+      </div>
+      <div class="card">
+        <p class="kick">비 오는 날</p>
+        <h4>실내로 대체</h4>
+        <p>츄라우미 수족관과 오리온 견학은 이미 들어 있고, 추가로 오키나와 월드 종유동굴, DFS 갤러리아, 이온몰 라이카무, 나하 시내 박물관. 하루를 통째로 대체할 수 있습니다.</p>
+      </div>
+      <div class="card">
+        <p class="kick">체력이 떨어지면</p>
+        <h4>먼저 뺄 순서</h4>
+        <p>나미노우에 → 쓰보야 → 비세 나무길 순으로 빼세요. 코우리 대교와 만좌모는 앉거나 잠깐 걷는 일정이라 마지막까지 남깁니다.</p>
+      </div>
+      <div class="card">
+        <p class="kick">먹어볼 것</p>
+        <h4>오키나와 음식</h4>
+        <p>오키나와 소바, 아구 샤브샤브, 타코라이스, 지마미 두부, 고야 참프루, 사타안다기, 블루씰 아이스크림.</p>
+      </div>
+      <div class="card">
+        <p class="kick">기념품</p>
+        <h4>국제거리에서 한 번에</h4>
+        <p>베니이모 타르트, 친스코, 시콰사 원액, 누치마스 소금, 아와모리. 3일차 저녁에 걸어다니며 사면 되고, 못 산 건 4일차 공항 3층에서 보충하면 됩니다.</p>
+      </div>
+      <div class="card">
+        <p class="kick">숫자 요약</p>
+        <h4>4일간</h4>
+        <ul>
+          <li>총 운전 <b>9시간 10분</b></li>
+          <li>바다 수영 <b>2회</b> (푸른 동굴, 에메랄드 비치)</li>
+          <li>숙소 이동 <b>1회</b> (3일차)</li>
+          <li>같은 길 왕복 <b>1구간</b> (2일차 북부)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    운영 시간·요금·개장 여부는 방문 전 공식 정보로 다시 확인하세요 · 최종 정리 2026.08.02
+  </footer>
+</div>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
+  var map = {};
+  links.forEach(function(a){
+    var el = document.querySelector(a.getAttribute('href'));
+    if(el) map[el.id] = a;
+  });
+  if(!('IntersectionObserver' in window)) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(l){ l.classList.remove('on'); });
+        if(map[e.target.id]) map[e.target.id].classList.add('on');
+      }
+    });
+  }, {rootMargin:'-70px 0px -70% 0px', threshold:0});
+  Object.keys(map).forEach(function(id){ obs.observe(document.getElementById(id)); });
+})();
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function(){
+  if(typeof L === 'undefined'){
+    document.getElementById('okmap').innerHTML =
+      '<div style="padding:24px;font-size:14px;color:#5D7683">지도를 불러오지 못했습니다. 인터넷 연결을 확인하거나 아래 날짜별 버튼으로 구글 지도를 여세요.</div>';
+    return;
+  }
+  var C = {d1:'#E2A32B', d2:'#17968F', d3:'#DE5238', d4:'#5D7683', stay:'#0E2C3B'};
+
+  var HOTEL1 = [26.3877,127.7398];
+  var HOTEL2 = [26.2180,127.6862];
+
+  var stops = [
+    {d:'d1', n:'1',  ll:[26.2001297,127.6466452], t:'10:30 도착', name:'나하공항', desc:'렌터카 셔틀 이동과 수속에 40~60분. 실제 출발은 11시 40분쯤.'},
+    {d:'d1', n:'2',  ll:[26.1766603,127.6404367], t:'11:55 · 1시간 15분', name:'세나가지마 우미카지 테라스', desc:'공항에서 10분. 바다 위로 비행기가 낮게 지나가는 언덕 위 상가.'},
+    {d:'d1', n:'3',  ll:[26.3158768,127.7540067], t:'13:45 · 2시간 15분', name:'아메리칸 빌리지 · 선셋 비치', desc:'숙소 가는 길목이라 첫날에 처리. 방파제 산책로가 평탄합니다.'},
+    {d:'d1', n:'4',  ll:[26.5052353,127.8504781], t:'17:50 · 1시간 10분', name:'만좌모', desc:'숙소에서 30분. 평탄한 길 왕복 20분. 일몰 18시 30분 전후.'},
+
+    {d:'d2', n:'1',  ll:[26.4425977,127.7734662], t:'08:00 · 2시간 · 동생', name:'푸른 동굴 (마에다곶)', desc:'숙소에서 15분. 첫 타임이라 물이 가장 맑습니다.'},
+    {d:'d2', n:'2',  ll:[26.6920917,127.8801006], t:'11:45 · 2시간', name:'츄라우미 수족관', desc:'위층에서 내려오는 구조라 오르막이 없습니다. 입장권은 편의점 사전 구매.'},
+    {d:'d2', n:'3',  ll:[26.6949596,127.8765226], t:'14:35 · 55분', name:'에메랄드 비치', desc:'수족관과 같은 공원 안. 무료, 샤워·탈의실 완비, 방지망 안쪽에서 수영.'},
+    {d:'d2', n:'4',  ll:[26.7015874,127.8802247], t:'15:45 · 40분', name:'비세 후쿠기 나무길', desc:'차로 5분. 물소 수레 20분이면 걷지 않고 한 바퀴.'},
+    {d:'d2', n:'5',  ll:[26.6865208,128.0172722], t:'17:05 · 35분', name:'코우리 대교', desc:'바다를 가르는 2km 다리. 이후 숙소까지 1시간 35분.'},
+
+    {d:'d3', n:'1',  ll:[26.5910,127.9793],       t:'09:45 · 1시간 15분', name:'오리온 해피파크 (나고)', desc:'10시 견학 예약. 견학 35분 + 시음 20분. 사전 예약 필수, 수·목 휴무.'},
+    {d:'d3', n:'2',  ll:[26.2137,127.6892],       t:'13:00 · 1시간 30분', name:'마키시 공설시장', desc:'1층에서 고른 재료를 2층에서 요리. 구경과 점심을 한 번에.'},
+    {d:'d3', n:'3',  ll:[26.2130,127.6958],       t:'16:15 · 45분 · 선택', name:'쓰보야 야치문 거리', desc:'국제거리 남쪽 끝에서 도보 5분. 도자기 공방이 이어지는 조용한 돌길.'},
+    {d:'d3', n:'4',  ll:[26.2155,127.6885],       t:'17:10', name:'국제거리 · 헤이와도리', desc:'기념품을 여기서 다 해결. 저녁까지 걸어서.'},
+
+    {d:'d4', n:'1',  ll:[26.2196,127.6683],       t:'08:35 · 20분 · 선택', name:'나미노우에 궁 · 비치', desc:'공항 가는 길목. 절벽 위 신사와 그 아래 작은 해변.'}
+  ];
+
+  var hotels = [
+    {ll:HOTEL1, name:'호텔 무라사키무라 (요미탄)', t:'1·2박', desc:'마에다곶 15분, 챠탄 30분, 만좌모 30분, 츄라우미 1시간 20분.'},
+    {ll:HOTEL2, name:'나하 숙소 (미정)', t:'3박', desc:'국제거리 도보권. 12시 45분에 세운 뒤 다음 날 아침까지 차를 안 씁니다. 공항 20분.'}
+  ];
+
+  var routes = [
+    {c:C.d1, pts:[[26.2001297,127.6466452],[26.1766603,127.6404367],[26.3158768,127.7540067],HOTEL1,[26.5052353,127.8504781],HOTEL1]},
+    {c:C.d2, pts:[HOTEL1,[26.4425977,127.7734662],HOTEL1,[26.6920917,127.8801006],[26.6949596,127.8765226],[26.7015874,127.8802247],[26.6865208,128.0172722],HOTEL1]},
+    {c:C.d3, pts:[HOTEL1,[26.5910,127.9793],HOTEL2,[26.2137,127.6892],[26.2130,127.6958],[26.2155,127.6885]]},
+    {c:C.d4, pts:[HOTEL2,[26.2196,127.6683],[26.2001297,127.6466452]]}
+  ];
+
+  var map = L.map('okmap', {scrollWheelZoom:false});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom:18, attribution:'&copy; OpenStreetMap'
+  }).addTo(map);
+
+  routes.forEach(function(r){
+    L.polyline(r.pts, {color:r.c, weight:3, opacity:.75, dashArray:'6 6'}).addTo(map);
+  });
+
+  function popup(o){
+    return '<em>'+o.t+'</em><b>'+o.name+'</b>'+(o.desc?o.desc:'');
+  }
+
+  stops.forEach(function(o){
+    L.marker(o.ll, {icon: L.divIcon({
+      className:'', iconSize:[24,24], iconAnchor:[12,12],
+      html:'<div class="pin" style="background:'+C[o.d]+'">'+o.n+'</div>'
+    })}).addTo(map).bindPopup(popup(o));
+  });
+
+  hotels.forEach(function(o){
+    L.marker(o.ll, {icon: L.divIcon({
+      className:'', iconSize:[26,26], iconAnchor:[13,13],
+      html:'<div class="pin sq">숙</div>'
+    }), zIndexOffset:500}).addTo(map).bindPopup(popup(o));
+  });
+
+  var all = [];
+  routes.forEach(function(r){ all = all.concat(r.pts); });
+  map.fitBounds(L.latLngBounds(all).pad(0.12));
+})();
+</script>
+</body>
+</html>
