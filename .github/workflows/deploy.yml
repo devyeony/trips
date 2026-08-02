@@ -23,9 +23,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-      # npm install (not ci): the lockfile is generated on macOS and omits
-      # Linux-only optional deps that the Ubuntu runner needs.
+      # No lockfile is committed (it's generated on macOS and omits the
+      # Linux-only native bindings Astro needs), so install fresh on the
+      # Ubuntu runner to pull the correct platform binaries.
       - run: npm install
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3

@@ -23,3 +23,6 @@ Icon?
 *.log
 .env
 .env.local
+
+# Lockfile is platform-specific here; CI installs fresh
+package-lock.json
