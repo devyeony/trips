@@ -1,25 +1,46 @@
 # trips
 
-Travel itineraries as static pages, published with GitHub Pages.
+Travel itineraries built with [Astro](https://astro.build) and published to GitHub Pages.
 
-One folder per trip: `destination-year/index.html`. No build step — just open in a browser.
+Each trip is a data file plus shared components, so a new trip means writing content — not re-building the layout, timeline, or map.
 
 ## Trips
 
 | Trip | Dates | Page |
 | --- | --- | --- |
-| Okinawa | 2026.09.27 – 09.30 | [`okinawa-2026/`](okinawa-2026/) |
+| Okinawa | 2026.09.27 – 09.30 | [`/okinawa-2026/`](https://devyeony.github.io/trips/okinawa-2026/) |
+
+## Develop
+
+```bash
+npm install
+npm run dev      # http://localhost:4321/trips
+npm run build    # static output to dist/
+```
+
+## Structure
+
+```
+src/
+├── layouts/Trip.astro        # page shell: head, nav, footer, scroll-spy
+├── components/               # Hero, RouteMap, Day, CardGrid, Checklist, …
+├── data/
+│   ├── types.ts              # the shape of a trip
+│   └── okinawa-2026.ts       # one trip's content
+└── pages/
+    ├── index.astro           # trip hub
+    └── okinawa-2026.astro     # assembles components from the data file
+```
 
 ## Adding a trip
 
-1. Create a `destination-year` folder with an `index.html` inside
-2. Add a row to the table above
-3. Push to `main` — GitHub Pages redeploys automatically
+1. Copy `src/data/okinawa-2026.ts` to `src/data/<trip>.ts` and fill in the content
+2. Copy `src/pages/okinawa-2026.astro` to `src/pages/<trip>.astro`, importing the new data
+3. Add a card to `src/pages/index.astro` and a row to the table above
+4. Push to `main` — GitHub Actions builds and deploys automatically
 
-## Publishing
+## Deploy
 
-Settings → Pages → Deploy from a branch → `main` / `(root)`
+Pushes to `main` trigger `.github/workflows/deploy.yml`, which builds with Astro and publishes `dist/` to GitHub Pages.
 
-Served at `https://<username>.github.io/trips/<trip-folder>/`
-
-> The repo is public, so keep booking references, passport details, and phone numbers out of these pages.
+> The repo is public, so keep booking references, passport details, and phone numbers out of trip data.
