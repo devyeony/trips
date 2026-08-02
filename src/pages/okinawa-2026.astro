@@ -1,0 +1,20 @@
+---
+import Trip from '../layouts/Trip.astro';
+import Hero from '../components/Hero.astro';
+import Legend from '../components/Legend.astro';
+import RouteMap from '../components/RouteMap.astro';
+import Day from '../components/Day.astro';
+import CardGrid from '../components/CardGrid.astro';
+import Checklist from '../components/Checklist.astro';
+import { okinawa2026 as trip } from '../data/okinawa-2026';
+---
+<Trip trip={trip}>
+  <Hero slot="hero" hero={trip.hero} />
+
+  <Legend legend={trip.legend} />
+  <RouteMap map={trip.map} />
+  {trip.days.map((day) => <Day day={day} />)}
+  <CardGrid section={trip.stay} />
+  <Checklist prep={trip.prep} />
+  <CardGrid section={trip.planB} />
+</Trip>

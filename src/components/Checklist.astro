@@ -1,0 +1,19 @@
+---
+import type { Trip } from '../data/types';
+interface Props { prep: Trip['prep']; }
+const { prep } = Astro.props;
+---
+<section class="block" id={prep.id}>
+  <div class="blockhead">
+    <span class="no">{prep.no}</span>
+    <h2>{prep.title}</h2>
+  </div>
+  <div class="check">
+    {prep.rows.map((row) => (
+      <div class="row">
+        <div class="k">{row.k}</div>
+        <div class="v" set:html={row.v} />
+      </div>
+    ))}
+  </div>
+</section>

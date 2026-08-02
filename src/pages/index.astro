@@ -1,0 +1,51 @@
+---
+import '../styles/global.css';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const trips = [
+  {
+    href: `${base}/okinawa-2026/`,
+    eyebrow: '2026.09.27 – 09.30 · 3박 4일',
+    title: '천천히 가는 오키나와',
+    sub: '요미탄 2박 + 나하 1박. 4인 · 렌터카.',
+  },
+];
+---
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>여행 기록</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Trips</p>
+      <h1>여행 기록</h1>
+      <p class="sub">가족과 함께 다닌 여행의 일정과 동선을 정리해 둔 곳.</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="block">
+      <div class="grid" style="margin-top:0">
+        {trips.map((t) => (
+          <a class="card" href={t.href} style="text-decoration:none;color:inherit;display:block">
+            <p class="kick">{t.eyebrow}</p>
+            <h4 style="font-family:var(--disp);font-size:20px">{t.title}</h4>
+            <p>{t.sub}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <footer>최종 정리 2026.08.02</footer>
+  </div>
+</body>
+</html>

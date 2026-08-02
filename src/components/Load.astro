@@ -1,0 +1,6 @@
+---
+import type { Load } from '../data/types';
+interface Props { load: Load; }
+const { load } = Astro.props;
+---
+<span class="load" data-load={load}><i></i><i></i><i></i></span>

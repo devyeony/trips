@@ -1,0 +1,118 @@
+---
+import type { TripMap } from '../data/types';
+interface Props { map: TripMap; }
+const { map } = Astro.props;
+
+// Data the client script needs, serialised into the page.
+const mapData = {
+  mapId: map.mapId,
+  dayColors: map.dayColors,
+  stops: map.stops,
+  hotels: map.hotels,
+  routes: map.routes,
+};
+---
+<section class="block" id={map.id}>
+  <div class="blockhead">
+    <span class="no">{map.no}</span>
+    <h2>{map.title}</h2>
+  </div>
+  <div class="mapbox">
+    <div id={map.mapId} role="application" aria-label={map.ariaLabel}></div>
+
+    <div class="maplegend">
+      {map.legend.map((l) => (
+        <span><b style={`background:${l.color}`}></b> {l.label}</span>
+      ))}
+    </div>
+    <p class="mapnote">{map.note}</p>
+
+    <div class="dirlinks">
+      {map.dirLinks.map((d) => (
+        <a href={d.href} target="_blank" rel="noopener">
+          <span>{d.day}</span>구글 지도로 경로 열기
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <div class="grid" style="margin-top:16px">
+    {map.intro.map((card) => (
+      <div class="card">
+        <p class="kick">{card.kick}</p>
+        <h4>{card.title}</h4>
+        {card.body && <p set:html={card.body} />}
+      </div>
+    ))}
+  </div>
+</section>
+
+<script type="application/json" id="mapdata" set:html={JSON.stringify(mapData)} />
+
+<script>
+  import L from 'leaflet';
+
+  interface MapStop { d: string; n: string; ll: [number, number]; t: string; name: string; desc?: string; }
+  interface MapHotel { ll: [number, number]; name: string; t: string; desc?: string; }
+  interface MapRoute { color: string; pts: [number, number][]; }
+  interface MapData {
+    mapId: string;
+    dayColors: Record<string, string>;
+    stops: MapStop[];
+    hotels: MapHotel[];
+    routes: MapRoute[];
+  }
+
+  const el = document.getElementById('mapdata');
+  const data: MapData | null = el ? JSON.parse(el.textContent || 'null') : null;
+  const mapEl = data && document.getElementById(data.mapId);
+
+  if (data && mapEl) {
+    const map = L.map(data.mapId, { scrollWheelZoom: false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; OpenStreetMap',
+    }).addTo(map);
+
+    data.routes.forEach((r) => {
+      L.polyline(r.pts, { color: r.color, weight: 3, opacity: 0.75, dashArray: '6 6' }).addTo(map);
+    });
+
+    const popup = (o: { t: string; name: string; desc?: string }) =>
+      '<em>' + o.t + '</em><b>' + o.name + '</b>' + (o.desc ? o.desc : '');
+
+    data.stops.forEach((o) => {
+      L.marker(o.ll, {
+        icon: L.divIcon({
+          className: '',
+          iconSize: [24, 24],
+          iconAnchor: [12, 12],
+          html: '<div class="pin" style="background:' + data.dayColors[o.d] + '">' + o.n + '</div>',
+        }),
+      })
+        .addTo(map)
+        .bindPopup(popup(o));
+    });
+
+    data.hotels.forEach((o) => {
+      L.marker(o.ll, {
+        icon: L.divIcon({
+          className: '',
+          iconSize: [26, 26],
+          iconAnchor: [13, 13],
+          html: '<div class="pin sq">숙</div>',
+        }),
+        zIndexOffset: 500,
+      })
+        .addTo(map)
+        .bindPopup(popup(o));
+    });
+
+    let all: [number, number][] = [];
+    data.routes.forEach((r) => { all = all.concat(r.pts); });
+    map.fitBounds(L.latLngBounds(all).pad(0.12));
+  } else if (mapEl) {
+    mapEl.innerHTML =
+      '<div style="padding:24px;font-size:14px;color:#5D7683">지도를 불러오지 못했습니다. 인터넷 연결을 확인하거나 아래 날짜별 버튼으로 구글 지도를 여세요.</div>';
+  }
+</script>

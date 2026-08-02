@@ -1,0 +1,18 @@
+---
+import type { Trip } from '../data/types';
+import Load from './Load.astro';
+import Tags from './Tags.astro';
+interface Props { legend: Trip['legend']; }
+const { legend } = Astro.props;
+---
+<div class="legend">
+  <div class="box">
+    <h3>{legend.heading}</h3>
+    {legend.items.map((item) => (
+      <span class="lg">
+        {item.type === 'load' ? <Load load={item.load} /> : <Tags tags={item.tags} />}
+        {' '}{item.label}
+      </span>
+    ))}
+  </div>
+</div>

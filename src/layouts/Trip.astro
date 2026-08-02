@@ -1,0 +1,71 @@
+---
+import type { Trip } from '../data/types';
+import '../styles/global.css';
+import 'leaflet/dist/leaflet.css';
+
+interface Props { trip: Trip; }
+const { trip } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang={trip.lang}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{trip.title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet" />
+</head>
+<body>
+  <slot name="hero" />
+
+  <nav>
+    <div class="wrap">
+      <ul>
+        {trip.nav.map((item) => (
+          <li>
+            <a href={item.href}>
+              {item.n && <span class="n">{item.n}</span>}{item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <slot />
+
+    <footer set:html={trip.footer} />
+  </div>
+
+  <!-- Scroll-spy: highlight the nav tab of the section in view -->
+  <script>
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('nav a'));
+    const map: Record<string, HTMLAnchorElement> = {};
+    links.forEach((a) => {
+      const el = document.querySelector(a.getAttribute('href') || '');
+      if (el) map[el.id] = a;
+    });
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              links.forEach((l) => l.classList.remove('on'));
+              const a = map[(e.target as HTMLElement).id];
+              if (a) a.classList.add('on');
+            }
+          });
+        },
+        { rootMargin: '-70px 0px -70% 0px', threshold: 0 }
+      );
+      Object.keys(map).forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) obs.observe(el);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+---
+import type { BlockSection } from '../data/types';
+interface Props { section: BlockSection; extraGridStyle?: string; }
+const { section, extraGridStyle } = Astro.props;
+---
+<section class="block" id={section.id}>
+  <div class="blockhead">
+    <span class="no">{section.no}</span>
+    <h2>{section.title}</h2>
+  </div>
+  <div class="grid" style={extraGridStyle}>
+    {section.cards.map((card) => (
+      <div class="card">
+        <p class="kick">{card.kick}</p>
+        <h4>{card.title}</h4>
+        {card.body && <p set:html={card.body} />}
+        {card.list && (
+          <ul>
+            {card.list.map((li) => <li set:html={li} />)}
+          </ul>
+        )}
+      </div>
+    ))}
+  </div>
+</section>

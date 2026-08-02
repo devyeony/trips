@@ -1,0 +1,44 @@
+---
+import type { Day } from '../data/types';
+import Load from './Load.astro';
+import Tags from './Tags.astro';
+interface Props { day: Day; }
+const { day } = Astro.props;
+---
+<section class="day" id={day.id}>
+  <div class="dayhead">
+    <div>
+      <span class="no">{day.no}</span>
+      <h2>{day.title}</h2>
+      <p class="date">{day.date}</p>
+    </div>
+    <div class="daystat">
+      {day.stats.map((s) => (
+        <div>
+          <span class="k">{s.k}</span>
+          {s.load ? <Load load={s.load} /> : s.value}
+        </div>
+      ))}
+    </div>
+  </div>
+  <div class="tl">
+    {day.timeline.map((entry) =>
+      entry.kind === 'drive' ? (
+        <div class="drive"><span>{entry.label}</span></div>
+      ) : (
+        <div class={entry.key ? 'stop key' : 'stop'}>
+          <div class="when">{entry.when}</div>
+          <h4>{entry.title} <Tags tags={entry.tags} /></h4>
+          {entry.desc && <p set:html={entry.desc} />}
+          {(entry.duration || entry.load) && (
+            <div class="foot">
+              {entry.duration && <span>{entry.duration}</span>}
+              {entry.load && <Load load={entry.load} />}
+            </div>
+          )}
+        </div>
+      )
+    )}
+  </div>
+  {day.note && <div class="note" set:html={day.note} />}
+</section>

@@ -1,0 +1,6 @@
+---
+import type { Tag } from '../data/types';
+interface Props { tags?: Tag[]; }
+const { tags = [] } = Astro.props;
+---
+{tags.map((tag) => <span class={`tag t-${tag.kind}`}>{tag.label}</span>)}

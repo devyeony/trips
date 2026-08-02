@@ -1,0 +1,27 @@
+---
+import type { Trip } from '../data/types';
+interface Props { hero: Trip['hero']; }
+const { hero } = Astro.props;
+---
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">{hero.eyebrow}</p>
+    <h1 set:html={hero.heading} />
+    <p class="sub" set:html={hero.sub} />
+    <div class="legs">
+      {hero.legs.map((leg) => (
+        <div class="leg">
+          <div class="lab">{leg.label}</div>
+          <div class="route">
+            <span class="t">{leg.departTime}</span>
+            <span class="code">{leg.departCode}</span>
+            <span class="dash"></span>
+            <span class="t">{leg.arriveTime}</span>
+            <span class="code">{leg.arriveCode}</span>
+            <span class="fl">{leg.flight}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</header>
