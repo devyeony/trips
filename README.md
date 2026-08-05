@@ -8,7 +8,7 @@ Each trip is a data file plus shared components, so a new trip means writing con
 
 | Trip | Dates | Page |
 | --- | --- | --- |
-| Okinawa | 2026.09.27 – 09.30 | [`/okinawa-2026/`](https://devyeony.github.io/trips/okinawa-2026/) |
+| Okinawa | 2026.09.20 – 09.23 | [`/okinawa-2026/`](https://devyeony.github.io/trips/okinawa-2026/) |
 
 ## Develop
 
