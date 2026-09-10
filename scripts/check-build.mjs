@@ -61,6 +61,33 @@ for (const s of stops) {
   seen.set(key, true);
 }
 
+// Every pin must sit on its day's line, in marker order. The dashed lines and
+// the numbered pins are separate arrays, so one can be edited and the other
+// left behind — that is how American Village fell off day 1's route and how
+// day 2's line kept pointing at Aeon's old location.
+const md = JSON.parse(trip.match(/id="mapdata">(.*?)<\/script>/s)[1]);
+const at = ([a, b]) => `${a},${b}`;
+const hotels = new Set(md.hotels.map((h) => at(h.ll)));
+for (const route of md.routes) {
+  const onLine = route.pts.map(at);
+  const unknown = onLine.filter(
+    (p) => !hotels.has(p) && !md.stops.some((s) => at(s.ll) === p));
+  for (const u of unknown) failures.push(`${route.d} route passes ${u}, which is not a pin`);
+
+  const mine = md.stops.filter((s) => s.d === route.d);
+  for (const s of mine) {
+    if (!onLine.includes(at(s.ll))) failures.push(`${route.d} route skips pin ${s.n} (${s.name})`);
+  }
+  const order = onLine
+    .map((p) => mine.find((s) => at(s.ll) === p)?.n)
+    .filter(Boolean)
+    .map(Number);
+  const sorted = [...order].sort((a, b) => a - b);
+  if (String(order) !== String(sorted)) {
+    failures.push(`${route.d} route visits pins out of order: ${order.join(' → ')}`);
+  }
+}
+
 check('hub card is unstyled', hub.includes('class="tripcard"'));
 
 if (failures.length) {
