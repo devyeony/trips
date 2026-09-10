@@ -62,11 +62,11 @@ export const okinawa2026: Trip = {
     ],
     dirLinks: [
       {
-        day: "DAY 1",
+        day: "DAY 1 · 공항 → 챠탄 → 야마다",
         href: "https://www.google.com/maps/dir/?api=1&origin=26.1932392,127.6604863&destination=26.4349,127.7801&waypoints=26.3158768,127.7540067%7C26.320462,127.753762%7C26.3146,127.7957&travelmode=driving",
       },
       {
-        day: "DAY 2",
+        day: "DAY 2 · 만좌모 → 츄라우미 → 잔파미사키",
         href: "https://www.google.com/maps/dir/?api=1&origin=26.4349,127.7801&destination=26.4349,127.7801&waypoints=26.4438,127.8106%7C26.5052353,127.8504781%7C26.6920917,127.8801006%7C26.658037,127.885056%7C26.6094,127.9848%7C26.4409,127.7104&travelmode=driving",
       },
       {
