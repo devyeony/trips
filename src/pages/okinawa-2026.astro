@@ -10,15 +10,15 @@ import { okinawa2026 as trip } from '../data/okinawa-2026';
 <Trip trip={trip}>
   <Hero slot="hero" hero={trip.hero} />
 
-  <div id="view-plan" role="tabpanel" aria-labelledby="tab-plan">
+  <div id="view-plan" class="view on" role="tabpanel" aria-labelledby="tab-plan">
     {trip.days.map((day, i) => <Day day={day} index={i} />)}
   </div>
 
-  <div id="view-map" role="tabpanel" aria-labelledby="tab-map" hidden>
+  <div id="view-map" class="view" role="tabpanel" aria-labelledby="tab-map">
     <RouteMap map={trip.map} />
   </div>
 
-  <div id="view-info" role="tabpanel" aria-labelledby="tab-info" hidden>
+  <div id="view-info" class="view" role="tabpanel" aria-labelledby="tab-info">
     <CardGrid section={trip.stay} />
     <Checklist prep={trip.prep} />
     <CardGrid section={trip.planB} />

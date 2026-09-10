@@ -5,7 +5,7 @@ import type { Day } from '../data/types';
 interface Props { days: Day[]; }
 const { days } = Astro.props;
 ---
-<div class="daytabs" id="daytabs" role="tablist" aria-label="날짜 전환">
+<div class="daytabs on" id="daytabs" role="tablist" aria-label="날짜 전환">
   {days.map((day, i) => (
     <button
       type="button"

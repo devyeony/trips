@@ -5,7 +5,7 @@ import Stop from './Stop.astro';
 interface Props { day: Day; index: number; }
 const { day, index } = Astro.props;
 ---
-<section class="day" data-day={day.id} id={day.id} hidden={index !== 0}>
+<section class:list={['day', { on: index === 0 }]} data-day={day.id} id={day.id}>
   <div class="dayhead">
     <span class="no">{day.no}</span>
     <h2>{day.title}</h2>
