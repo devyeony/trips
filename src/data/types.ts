@@ -137,7 +137,6 @@ export interface TripMap {
   stops: MapStop[];
   hotels: MapHotel[];
   routes: MapRoute[];
-  intro: Card[];          // cards under the map
 }
 
 /** The whole trip. */

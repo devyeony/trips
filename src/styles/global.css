@@ -224,14 +224,6 @@ section.block{padding:34px 0 8px}
 .dirlinks a span{display:block;font-family:var(--mono);font-size:calc(11.5px * var(--s));
   letter-spacing:.1em;color:var(--lagoon);margin-bottom:4px}
 
-/* the four "why this route" cards under the map */
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:16px}
-.card{background:var(--paper);border:1px solid var(--line-soft);border-radius:3px;padding:20px}
-.card .kick{font-family:var(--mono);font-size:calc(11.5px * var(--s));letter-spacing:.12em;
-  color:var(--lagoon);margin:0 0 10px}
-.card h4{margin:0 0 7px;font-size:calc(17px * var(--s));font-weight:700;line-height:1.4}
-.card p{margin:0;font-size:calc(15px * var(--s));color:var(--muted);line-height:1.7}
-
 [hidden]{display:none !important}
 
 /* Tab behaviour lives behind .js, which <head> sets before first paint.
@@ -283,8 +275,6 @@ section.block{padding:34px 0 8px}
   #okmap{height:min(66vh,460px)}
   .maplegend{gap:14px;justify-content:flex-start}
   .dirlinks{grid-template-columns:1fr}
-  .grid{grid-template-columns:1fr}
-  .card{padding:16px}
 }
 @media(max-width:380px){
   .daytabs{gap:4px}

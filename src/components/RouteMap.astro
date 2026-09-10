@@ -35,16 +35,6 @@ const mapData = {
       ))}
     </div>
   </div>
-
-  <div class="grid" style="margin-top:16px">
-    {map.intro.map((card) => (
-      <div class="card">
-        <p class="kick">{card.kick}</p>
-        <h4>{card.title}</h4>
-        {card.body && <p set:html={card.body} />}
-      </div>
-    ))}
-  </div>
 </section>
 
 <script type="application/json" id="mapdata" set:html={JSON.stringify(mapData)} />
