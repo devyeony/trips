@@ -1,0 +1,37 @@
+---
+// One block of the info view. Nothing collapses.
+//
+// This used to be accordions - 44 rows of them - and it was the wrong shape.
+// The plan view is read in order, so a collapsed card there hides prose you
+// don't need yet. The info view is the opposite: you arrive at it looking for
+// one fact, and an accordion makes you tap every heading to find out which one
+// holds it. So everything is open, and the content is bullets, not paragraphs.
+import type { InfoSection } from '../data/types';
+import Facts from './Facts.astro';
+
+interface Props { section: InfoSection; }
+const { section } = Astro.props;
+---
+<section class="block" id={section.id}>
+  <div class="grouphead">
+    <span class="no">{section.no}</span>
+    <h2>{section.title}</h2>
+    {section.note && <p>{section.note}</p>}
+  </div>
+
+  <div class="cards">
+    {section.cards.map((card) => (
+      <article class="card">
+        {card.kick && <span class="kick">{card.kick}</span>}
+        <h3>{card.title}</h3>
+        {card.facts?.length && <Facts facts={card.facts} />}
+        {card.body && <div class="prose" set:html={card.body} />}
+        {card.list && (
+          <ul class="lst">
+            {card.list.map((li) => <li set:html={li} />)}
+          </ul>
+        )}
+      </article>
+    ))}
+  </div>
+</section>

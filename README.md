@@ -6,8 +6,9 @@ Each trip is a data file plus shared components, so a new trip means writing con
 
 Pages are built for readers in their 60s on a phone: stops are collapsed cards
 you tap to expand, one day shows at a time, and a "큰 글자" control scales the
-whole page and remembers the choice. With JavaScript off the page degrades to a
-single scroll containing every day and every section.
+whole page and remembers the choice. The info view is the exception — it is
+scanned, not read, so nothing there collapses. With JavaScript off the page
+degrades to a single scroll containing every day and every section.
 
 ## Trips
 
@@ -31,10 +32,10 @@ src/
 ├── components/
 │   ├── Stop.astro            # one stop, as a collapsed card
 │   ├── Facts.astro           # address / phone / hours / parking / price
-│   ├── Accordion.astro       # collapsed row, used across the info view
+│   ├── Info.astro            # one block of the info view — cards, all open
 │   ├── More.astro            # the "자세히 보기" affordance
 │   ├── DayTabs.astro         # four fixed date tabs, never a scroll
-│   └── Day, Hero, RouteMap, CardGrid, Checklist, Tags
+│   └── Day, Hero, RouteMap, Tags
 ├── data/
 │   ├── types.ts              # the shape of a trip
 │   └── okinawa-2026.ts       # one trip's content
@@ -63,6 +64,18 @@ day itself. `detail` is the long prose, revealed on tap.
 
 Keep bold to one per paragraph. At a third of the body text it stopped meaning
 anything, which is what prompted this layout in the first place.
+
+### The info view
+
+`info` is a list of blocks — 숙소, 출발 전, 현금, 렌터카, 짐, 기념품, 플랜 B —
+each holding cards that are always open. Two rules keep it from growing back
+into the 44-row accordion it replaced:
+
+- **If it belongs to one moment of the trip, it belongs to that stop.** Where to
+  park in Chatan lives on the beach card, not here. This view is trip-wide
+  reference only.
+- **Prefer `facts` and `list` to `body`.** Nobody reads this view top to bottom;
+  they arrive looking for one number.
 
 ## Adding a trip
 

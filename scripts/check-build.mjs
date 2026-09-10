@@ -29,6 +29,8 @@ for (const rule of [
   '.js .daytabs{', '.js .daytabs.on{',
   '.mapbox{', '#okmap{', '.pin{', '.leaflet-popup-content{',
   '.tripcard{', '.triplist{', 'footer{', 'main{',
+  // The info view is cards, not accordions — losing these leaves it unstyled.
+  '.cards{', '.card{',
   // Without this the open pill hovers white-on-white and 접기 disappears.
   'details[open] summary:hover .more{',
 ]) check(`global.css is missing ${rule}`, css.includes(rule));
@@ -52,6 +54,12 @@ check('exactly one view should start open', countOf(trip, /class="view on"/g) ==
 check('days are hidden server-side', !/class="day"[^>]*hidden/.test(trip));
 check('views are hidden server-side', !/role="tabpanel"[^>]*hidden/.test(trip));
 check('the .js marker never runs', trip.includes("classList.add('js')"));
+
+// The info view was accordions once, and it made every answer a tap. The only
+// <details> left on the page should be the stop cards in the plan view.
+check('the info view has grown an accordion',
+  countOf(trip, /<details/g) === countOf(trip, /<details class="stop"/g));
+check('suspiciously few info cards', countOf(trip, /<article class="card">/g) > 20);
 
 // Map filter.
 check('map legend is not filterable', countOf(trip, /data-day="(d[1-4]|all|stay)"[^>]*aria-pressed/g) === 6);

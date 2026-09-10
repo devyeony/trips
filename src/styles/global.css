@@ -194,16 +194,19 @@ details[open] .lbl-close{display:inline}
   font-size:calc(clamp(22px,4.4vw,28px) * var(--s));margin:0 0 7px}
 .grouphead p{margin:0;font-size:calc(15.5px * var(--s));color:var(--muted);line-height:1.7}
 
-details.acc{background:var(--paper);border:1.5px solid var(--line-soft);
-  border-radius:3px;margin-bottom:10px}
-details.acc[open]{border-color:var(--lagoon)}
-summary.acchead{list-style:none;cursor:pointer;padding:17px 18px;min-height:60px}
-summary.acchead::-webkit-details-marker{display:none}
-summary.acchead:hover{background:rgba(23,150,143,.045)}
-.acchead .k{font-size:calc(19px * var(--s));font-weight:700;line-height:1.4}
-.acchead .v{font-size:calc(16px * var(--s));color:var(--muted);margin-top:5px;line-height:1.65}
-.acchead .meta{margin-top:12px}
-.accbody{padding:0 18px 18px;border-top:1px solid var(--line-soft);margin-top:4px}
+/* Cards, all open. Two columns where there is room, one on a phone.
+   align-items:start so a short card doesn't stretch to its neighbour. */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:12px;align-items:start}
+.card{background:var(--paper);border:1.5px solid var(--line-soft);
+  border-radius:3px;padding:18px}
+.card .kick{display:block;font-family:var(--mono);font-size:calc(12px * var(--s));
+  letter-spacing:.1em;color:var(--lagoon);font-weight:500;margin-bottom:7px}
+.card h3{margin:0;font-size:calc(19px * var(--s));font-weight:700;line-height:1.4}
+/* The fact table already carries its own top rule; nothing else needs one. */
+.card .facts{margin:14px 0 0}
+.card .prose,.card .lst{margin-top:12px}
+.card .lst li:last-child,.card .prose p:last-child{margin-bottom:0}
 
 /* ─── 모바일 ─────────────────────────────────────────────────────────
    레일과 시각 거터를 없애고 카드를 화면 폭 전체로 씁니다.
@@ -302,7 +305,8 @@ section.block{padding:34px 0 8px}
   .facts dd:last-of-type{border-bottom:0}
 
   .body{padding:0 16px 16px}
-  .accbody{padding:0 16px 16px}
+  .cards{grid-template-columns:1fr;gap:10px}
+  .card{padding:16px}
   summary.acchead{padding:16px}
   .prose{max-width:none}
     main{padding-bottom:72px}

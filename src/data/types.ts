@@ -71,26 +71,24 @@ export interface Day {
 // have gone in one belongs to the stop it is about - a reader looking at
 // 07:00 should not have to scroll back up to learn the beach has no showers.
 
-/** A card in a grid (stay / plan B). */
-export interface Card {
-  kick: string;
+/** A card in the info view. Nothing here collapses - the info view is the
+ *  one place a reader scans rather than reads, and an accordion turned every
+ *  answer into a tap. Prefer `facts` and `list` over `body`. */
+export interface InfoCard {
+  kick?: string;          // small mono label above the title
   title: string;
-  body?: string;          // HTML string
-  list?: string[];        // HTML strings
+  body?: string;          // HTML string - a line or two, not paragraphs
+  facts?: Fact[];         // same table as a stop: address, hours, price
+  list?: string[];        // HTML strings - where most of the content lives
 }
 
-/** A row in the prep checklist, rendered as an accordion. */
-export interface CheckRow {
-  k: string;              // accordion heading
-  v: string;              // HTML string, revealed when expanded
-}
-
-/** A "generic" block section with a heading and card grid. */
-export interface BlockSection {
+/** One block of the info view: 숙소, 현금, 짐, 플랜 B. */
+export interface InfoSection {
   id: string;
-  no: string;             // "STAY"
+  no: string;             // "STAY" "CASH" "PACK"
   title: string;
-  cards: Card[];
+  note?: string;          // one line under the heading
+  cards: InfoCard[];
 }
 
 /** Map pins. */
@@ -151,7 +149,7 @@ export interface Trip {
   views: { plan: string; map: string; info: string };  // top tab labels
   map: TripMap;
   days: Day[];
-  stay: BlockSection;
-  prep: { id: string; no: string; title: string; rows: CheckRow[] };
-  planB: BlockSection;
+  /** The info view, top to bottom. Anything that belongs to one moment of
+   *  the trip lives on that stop instead - this is trip-wide reference only. */
+  info: InfoSection[];
 }

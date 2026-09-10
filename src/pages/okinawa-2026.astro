@@ -3,8 +3,7 @@ import Trip from '../layouts/Trip.astro';
 import Hero from '../components/Hero.astro';
 import RouteMap from '../components/RouteMap.astro';
 import Day from '../components/Day.astro';
-import CardGrid from '../components/CardGrid.astro';
-import Checklist from '../components/Checklist.astro';
+import Info from '../components/Info.astro';
 import { okinawa2026 as trip } from '../data/okinawa-2026';
 ---
 <Trip trip={trip}>
@@ -19,8 +18,6 @@ import { okinawa2026 as trip } from '../data/okinawa-2026';
   </div>
 
   <div id="view-info" class="view" role="tabpanel" aria-labelledby="tab-info">
-    <CardGrid section={trip.stay} />
-    <Checklist prep={trip.prep} />
-    <CardGrid section={trip.planB} />
+    {trip.info.map((section) => <Info section={section} />)}
   </div>
 </Trip>
