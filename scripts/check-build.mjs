@@ -39,7 +39,10 @@ check('.bar has no z-index', z);
 check(`.bar z-index ${z?.[1]} must beat Leaflet's 1000`, z && Number(z[1]) > 1000);
 
 // Structure of the trip page.
-check('no stop cards', countOf(trip, /<details class="stop"/g) === 51);
+// One card per stop, whatever the trip's length happens to be.
+check('stop cards do not match summaries',
+  countOf(trip, /<details class="stop"/g) === countOf(trip, /<p class="sum">/g));
+check('suspiciously few stop cards', countOf(trip, /<details class="stop"/g) > 40);
 check('no fact tables', countOf(trip, /<dl class="facts">/g) > 30);
 check('date tabs are not four', countOf(trip, /role="tab" data-day="d[1-4]"/g) === 4);
 check('exactly one day should start open', countOf(trip, /class="day on"/g) === 1);
