@@ -1,12 +1,12 @@
 ---
-// A collapsed row used across the info view and the day's "왜 이렇게 짰나" box.
+// A collapsed row: stays, the prep list, plan B, the route rationale.
 // Heading text is deliberately large - this is the layer people scan.
 import More from './More.astro';
 
-interface Props { k: string; v?: string; extraClass?: string; }
-const { k, v, extraClass } = Astro.props;
+interface Props { k: string; v?: string; }
+const { k, v } = Astro.props;
 ---
-<details class:list={['acc', extraClass]}>
+<details class="acc">
   <summary class="acchead">
     <div class="k">{k}</div>
     {v && <div class="v">{v}</div>}

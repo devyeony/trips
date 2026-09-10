@@ -31,13 +31,6 @@ export interface Leg {
   flight: string;         // "ZE633 · 2h30m"
 }
 
-/** A nav tab. `n` is the optional mono prefix like "D1". */
-export interface NavItem {
-  href: string;           // "#d1"
-  label: string;          // "도착 · 챠탄 · 만좌모"
-  n?: string;             // "D1"
-}
-
 /** A stop on a day's timeline, rendered as a collapsed card.
  *
  *  Collapsed, a reader sees: when · title · summary · tags · duration.

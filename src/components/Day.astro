@@ -4,6 +4,9 @@ import Stop from './Stop.astro';
 
 interface Props { day: Day; index: number; }
 const { day, index } = Astro.props;
+
+// Same words the stop cards use, so "부담" reads the same in both places.
+const LOAD_WORD = { 1: '앉아서', 2: '걷기', 3: '물놀이·계단' } as const;
 ---
 <section class:list={['day', { on: index === 0 }]} data-day={day.id} id={day.id}>
   <div class="dayhead">
@@ -14,7 +17,7 @@ const { day, index } = Astro.props;
 
   <div class="stats">
     {day.stats.map((s) => (
-      <span><b>{s.k}</b>{s.value}</span>
+      <span><b>{s.k}</b>{s.load ? LOAD_WORD[s.load] : s.value}</span>
     ))}
   </div>
 

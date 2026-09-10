@@ -99,7 +99,6 @@ h1,h2,h3,h4{text-wrap:balance;margin:0}
   background:var(--paper);border:1px solid var(--line-soft);padding:8px 12px;border-radius:3px}
 .stats span b{color:var(--lagoon);font-weight:600;margin-right:7px}
 
-
 /* ─── timeline (desktop: rail + time gutter) ────────────────────────── */
 .tl{border-left:2px solid var(--line);margin-left:74px;padding-bottom:8px}
 .row{position:relative;padding-left:24px}
@@ -165,7 +164,6 @@ details[open] .lbl-close{display:inline}
 
 /* ─── map view ──────────────────────────────────────────────────────── */
 .panel{background:var(--paper);border:1px solid var(--line-soft);padding:20px;margin-top:26px;border-radius:3px}
-.diagram{display:block;width:100%;max-width:460px;height:auto;margin:0 auto}
 .maplegend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;
   margin-top:18px;font-size:calc(14.5px * var(--s));color:var(--ink)}
 .maplegend span{display:flex;align-items:center;gap:8px}
@@ -202,6 +200,18 @@ summary.acchead:hover{background:rgba(23,150,143,.045)}
 /* ─── 모바일 ─────────────────────────────────────────────────────────
    레일과 시각 거터를 없애고 카드를 화면 폭 전체로 씁니다.
    시각은 카드 안 큰 배지가 됩니다.                                     */
+[hidden]{display:none !important}
+
+/* Tab behaviour lives behind .js, which <head> sets before first paint.
+   Without JavaScript none of this applies and the page is one scroll:
+   four days, then the map, then the info list. */
+.js .day{display:none}
+.js .day.on{display:block}
+.js .view{display:none}
+.js .view.on{display:block}
+.js .daytabs{display:none}          /* 일정 탭일 때만 날짜 탭이 보인다 */
+.js .daytabs.on{display:grid}
+
 @media(max-width:680px){
   .wrap{padding-inline:16px}
   .keyfacts{grid-template-columns:1fr}
