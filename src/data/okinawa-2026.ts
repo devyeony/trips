@@ -13,7 +13,7 @@ const HOTEL2: [number, number] = [26.21361, 127.67758];
 
 export const okinawa2026: Trip = {
   lang: "ko",
-  title: "오키나와 3박 4일 · 최종 일정",
+  title: "오키나와 여행",
 
   hero: {
     eyebrow: "2026.09.20 – 09.23 (3박 4일)",
