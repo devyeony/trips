@@ -20,10 +20,14 @@ const mapData = {
   <div class="mapbox">
     <div id={map.mapId} role="application" aria-label={map.ariaLabel}></div>
 
-    <div class="maplegend">
+    <div class="maplegend" id="maplegend" role="group" aria-label="날짜별로 보기">
+      <button type="button" class="lg on" data-day="all" aria-pressed="true">전체</button>
       {map.legend.map((l) => (
-        <span><b style={`background:${l.color}`}></b> {l.label}</span>
+        <button type="button" class="lg" data-day={l.d} aria-pressed="false">
+          <b style={`background:${l.color}`}></b>{l.label}
+        </button>
       ))}
+      <span class="lg-stay"><b></b>숙소</span>
     </div>
     <p class="mapnote">{map.note}</p>
 
@@ -44,7 +48,7 @@ const mapData = {
 
   interface MapStop { d: string; n: string; ll: [number, number]; t: string; name: string; desc?: string; }
   interface MapHotel { ll: [number, number]; name: string; t: string; desc?: string; }
-  interface MapRoute { color: string; pts: [number, number][]; }
+  interface MapRoute { d: string; color: string; pts: [number, number][]; }
   interface MapData {
     mapId: string;
     dayColors: Record<string, string>;
@@ -64,12 +68,22 @@ const mapData = {
       attribution: '&copy; OpenStreetMap',
     }).addTo(map);
 
-    data.routes.forEach((r) => {
-      L.polyline(r.pts, { color: r.color, weight: 3, opacity: 0.75, dashArray: '6 6' }).addTo(map);
-    });
-
     const popup = (o: { t: string; name: string; desc?: string }) =>
       '<em>' + o.t + '</em><b>' + o.name + '</b>' + (o.desc ? o.desc : '');
+
+    // One layer per day, so the legend can show a single day on its own.
+    const layers: Record<string, L.LayerGroup> = {};
+    const pts: Record<string, [number, number][]> = {};
+    const layerFor = (d: string) => {
+      if (!layers[d]) { layers[d] = L.layerGroup(); pts[d] = []; }
+      return layers[d];
+    };
+
+    data.routes.forEach((r) => {
+      L.polyline(r.pts, { color: r.color, weight: 3, opacity: 0.75, dashArray: '6 6' })
+        .addTo(layerFor(r.d));
+      pts[r.d].push(...r.pts);
+    });
 
     data.stops.forEach((o) => {
       L.marker(o.ll, {
@@ -80,40 +94,63 @@ const mapData = {
           html: '<div class="pin" style="background:' + data.dayColors[o.d] + '">' + o.n + '</div>',
         }),
       })
-        .addTo(map)
+        .addTo(layerFor(o.d))
         .bindPopup(popup(o));
+      pts[o.d].push(o.ll);
     });
 
+    // Where we sleep stays on the map whichever day is selected — it is the
+    // thing you orient the rest of the day against.
+    const stays = L.layerGroup().addTo(map);
     data.hotels.forEach((o) => {
       L.marker(o.ll, {
-        icon: L.divIcon({
-          className: '',
-          iconSize: [26, 26],
-          iconAnchor: [13, 13],
-          html: '<div class="pin sq">숙</div>',
-        }),
+        icon: L.divIcon({ className: '', iconSize: [26, 26], iconAnchor: [13, 13], html: '<div class="pin sq">숙</div>' }),
         zIndexOffset: 500,
       })
-        .addTo(map)
+        .addTo(stays)
         .bindPopup(popup(o));
     });
 
-    let all: [number, number][] = [];
-    data.routes.forEach((r) => { all = all.concat(r.pts); });
-    const bounds = L.latLngBounds(all).pad(0.12);
-    map.fitBounds(bounds);
+    const days = Object.keys(layers);
+    const boundsOf = (d: string) =>
+      L.latLngBounds(d === 'all' ? days.flatMap((k) => pts[k]) : pts[d] || []).pad(0.12);
 
-    // The map lives in a tab panel, so it is display:none at load and Leaflet
-    // measures the container as 0x0 — fitBounds then lands on the whole world.
-    // Re-fit the first time it actually has a size; afterwards only re-measure,
-    // so a resize doesn't throw away a zoom the reader chose.
-    let hadSize = mapEl.clientWidth > 0 && mapEl.clientHeight > 0;
+    let current = 'all';
+    let sized = mapEl.clientWidth > 0 && mapEl.clientHeight > 0;
+
+    function show(day: string) {
+      current = day;
+      days.forEach((d) => {
+        const on = day === 'all' || d === day;
+        if (on) layers[d].addTo(map); else map.removeLayer(layers[d]);
+      });
+      document.querySelectorAll<HTMLButtonElement>('#maplegend .lg').forEach((b) => {
+        const on = b.dataset.day === day;
+        b.classList.toggle('on', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+      // Always set a view: a Leaflet map without one renders nothing at all,
+      // not even tiles. While the panel is hidden this lands on the wrong
+      // zoom, which the ResizeObserver below corrects once it has a size.
+      const b = boundsOf(day);
+      if (b.isValid()) map.fitBounds(b);
+    }
+
+    show('all');
+
+    document.getElementById('maplegend')?.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-day]');
+      // Tapping the day you're already on goes back to the whole route.
+      if (b?.dataset.day) show(b.dataset.day === current ? 'all' : b.dataset.day);
+    });
+
+    // The map starts inside a hidden tab panel, so Leaflet measures it as 0x0
+    // and fitBounds lands on the whole world. Fit once it really has a size;
+    // after that only re-measure, so a resize keeps the reader's zoom.
     new ResizeObserver(() => {
-      const sized = mapEl.clientWidth > 0 && mapEl.clientHeight > 0;
-      if (!sized) return;
+      if (!(mapEl.clientWidth > 0 && mapEl.clientHeight > 0)) return;
       map.invalidateSize();
-      if (!hadSize) map.fitBounds(bounds);
-      hadSize = true;
+      if (!sized) { sized = true; map.fitBounds(boundsOf(current)); }
     }).observe(mapEl);
   } else if (mapEl) {
     mapEl.innerHTML =

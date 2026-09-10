@@ -209,10 +209,19 @@ section.block{padding:34px 0 8px}
 .leaflet-popup-content em{font-family:var(--mono);font-style:normal;font-size:calc(11.5px * var(--s));
   letter-spacing:.08em;color:var(--lagoon);display:block;margin-bottom:5px}
 
-.maplegend{display:flex;gap:20px;flex-wrap:wrap;margin:16px 0 0;justify-content:center;
-  font-size:calc(14px * var(--s));color:var(--muted)}
-.maplegend span{display:flex;align-items:center;gap:7px}
-.maplegend b{width:22px;height:3px;display:block;border-radius:2px}
+/* Legend doubles as a day filter — tap 2일차 to see that day alone,
+   tap it again for the whole route. */
+.maplegend{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 0;justify-content:center;align-items:center}
+.maplegend .lg{appearance:none;cursor:pointer;display:flex;align-items:center;gap:7px;
+  background:var(--paper);border:1.5px solid var(--line-soft);border-radius:999px;
+  padding:9px 15px;min-height:44px;font-family:var(--body);
+  font-size:calc(14.5px * var(--s));color:var(--muted);transition:.15s}
+.maplegend .lg:hover{border-color:var(--lagoon);color:var(--ink)}
+.maplegend .lg.on{background:var(--indigo);border-color:var(--indigo);color:#fff;font-weight:600}
+.maplegend .lg b{width:22px;height:4px;display:block;border-radius:2px}
+.maplegend .lg-stay{display:flex;align-items:center;gap:7px;padding:9px 4px;
+  font-size:calc(14.5px * var(--s));color:var(--muted)}
+.maplegend .lg-stay b{width:13px;height:13px;display:block;border-radius:3px;background:var(--indigo)}
 .mapnote{font-size:calc(13.5px * var(--s));color:var(--muted);text-align:center;
   margin:14px auto 0;max-width:52ch;line-height:1.7}
 
@@ -273,7 +282,8 @@ section.block{padding:34px 0 8px}
     .views button{padding:13px 11px;font-size:calc(16px * var(--s))}
   .mapbox{padding:12px}
   #okmap{height:min(66vh,460px)}
-  .maplegend{gap:14px;justify-content:flex-start}
+  .maplegend{gap:6px;justify-content:flex-start}
+  .maplegend .lg{padding:9px 12px;font-size:calc(14px * var(--s))}
   .dirlinks{grid-template-columns:1fr}
 }
 @media(max-width:380px){

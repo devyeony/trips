@@ -115,6 +115,7 @@ export interface MapHotel {
 }
 
 export interface MapRoute {
+  d: string;              // day key - lets the legend filter by day
   color: string;          // one of the day colours
   pts: LatLng[];
 }
@@ -131,7 +132,7 @@ export interface TripMap {
   mapId: string;          // dom id, "okmap"
   ariaLabel: string;
   dayColors: Record<string, string>;   // { d1:'#E2A32B', ... , stay:'#0E2C3B' }
-  legend: { color: string; label: string }[];
+  legend: { d: string; color: string; label: string }[];
   note: string;
   dirLinks: DirLink[];
   stops: MapStop[];

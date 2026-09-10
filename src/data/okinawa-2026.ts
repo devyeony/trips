@@ -49,10 +49,10 @@ export const okinawa2026: Trip = {
     ariaLabel: "오키나와 방문지 지도",
     dayColors: C,
     legend: [
-      { color: "#E2A32B", label: "1일차" },
-      { color: "#17968F", label: "2일차" },
-      { color: "#DE5238", label: "3일차" },
-      { color: "#5D7683", label: "4일차" },
+      { d: "d1", color: "#E2A32B", label: "1일차" },
+      { d: "d2", color: "#17968F", label: "2일차" },
+      { d: "d3", color: "#DE5238", label: "3일차" },
+      { d: "d4", color: "#5D7683", label: "4일차" },
     ],
     note: "마커를 누르면 시간과 설명이 나옵니다. 연결선은 직선 표시이니, 실제 도로 경로는 아래 날짜별 버튼으로 확인하세요. 지도를 보려면 인터넷 연결이 필요합니다.",
     dirLinks: [
@@ -335,6 +335,7 @@ export const okinawa2026: Trip = {
     ],
     routes: [
       {
+        d: "d1",
         color: C.d1,
         pts: [
           [26.2001297, 127.6466452],
@@ -346,6 +347,7 @@ export const okinawa2026: Trip = {
         ],
       },
       {
+        d: "d2",
         color: C.d2,
         pts: [
           HOTEL1,
@@ -361,6 +363,7 @@ export const okinawa2026: Trip = {
         ],
       },
       {
+        d: "d3",
         color: C.d3,
         pts: [
           HOTEL1,
@@ -385,6 +388,7 @@ export const okinawa2026: Trip = {
         ],
       },
       {
+        d: "d4",
         color: C.d4,
         pts: [
           HOTEL2,
