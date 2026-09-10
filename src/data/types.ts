@@ -156,5 +156,4 @@ export interface Trip {
   stay: BlockSection;
   prep: { id: string; no: string; title: string; rows: CheckRow[] };
   planB: BlockSection;
-  footer: string;
 }
