@@ -28,24 +28,21 @@ const trips = [
     <div class="wrap">
       <p class="eyebrow">Trips</p>
       <h1>여행 기록</h1>
-      <p class="sub">가족과 함께 다닌 여행의 일정과 동선을 정리해 둔 곳.</p>
     </div>
   </header>
 
-  <div class="wrap">
-    <section class="block">
-      <div class="grid" style="margin-top:0">
-        {trips.map((t) => (
-          <a class="card" href={t.href} style="text-decoration:none;color:inherit;display:block">
-            <p class="kick">{t.eyebrow}</p>
-            <h4 style="font-family:var(--disp);font-size:20px">{t.title}</h4>
-            <p>{t.sub}</p>
-          </a>
-        ))}
-      </div>
-    </section>
+  <main class="wrap">
+    <div class="triplist">
+      {trips.map((t) => (
+        <a class="tripcard" href={t.href}>
+          <span class="kick">{t.eyebrow}</span>
+          <span class="name">{t.title}</span>
+          <span class="sub">{t.sub}</span>
+        </a>
+      ))}
+    </div>
 
-    <footer>최종 정리 2026.08.05</footer>
-  </div>
+    <footer>최종 정리 2026.09.10</footer>
+  </main>
 </body>
 </html>
