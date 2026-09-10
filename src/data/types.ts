@@ -135,7 +135,7 @@ export interface TripMap {
   ariaLabel: string;
   dayColors: Record<string, string>;   // { d1:'#E2A32B', ... , stay:'#0E2C3B' }
   legend: { d: string; color: string; label: string }[];
-  note: string;
+  note: string[];         // one line each, rendered as a list
   dirLinks: DirLink[];
   stops: MapStop[];
   hotels: MapHotel[];

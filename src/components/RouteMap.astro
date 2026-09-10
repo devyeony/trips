@@ -29,7 +29,9 @@ const mapData = {
       ))}
       <span class="lg-stay"><b></b>숙소</span>
     </div>
-    <p class="mapnote">{map.note}</p>
+    <ul class="mapnote">
+      {map.note.map((line) => <li>{line}</li>)}
+    </ul>
 
     <div class="dirlinks">
       {map.dirLinks.map((d) => (
