@@ -60,7 +60,9 @@ h1,h2,h3,h4{text-wrap:balance;margin:0}
 .kf .meta{font-size:calc(13px * var(--s));color:#9FC0C4;line-height:1.6}
 
 /* ─── sticky bar ────────────────────────────────────────────────────── */
-.bar{position:sticky;top:0;z-index:50;background:rgba(251,247,239,.97);
+/* Above Leaflet, whose controls sit at z-index 1000 — otherwise the map
+   draws over the sticky tabs as you scroll past it. */
+.bar{position:sticky;top:0;z-index:1200;background:rgba(251,247,239,.97);
   backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .barrow{display:flex;align-items:center;gap:6px}
 .views{display:flex;gap:4px;flex:1}
