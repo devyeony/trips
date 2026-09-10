@@ -108,6 +108,8 @@ export interface MapStop {
 }
 
 export interface MapHotel {
+  d: string[];            // days this stay is in use - the Naha room is not
+                          // on the map while you are still sleeping in Onna
   ll: LatLng;
   name: string;
   t: string;

@@ -47,7 +47,7 @@ const mapData = {
   import L from 'leaflet';
 
   interface MapStop { d: string; n: string; ll: [number, number]; t: string; name: string; desc?: string; }
-  interface MapHotel { ll: [number, number]; name: string; t: string; desc?: string; }
+  interface MapHotel { d: string[]; ll: [number, number]; name: string; t: string; desc?: string; }
   interface MapRoute { d: string; color: string; pts: [number, number][]; }
   interface MapData {
     mapId: string;
@@ -99,21 +99,24 @@ const mapData = {
       pts[o.d].push(o.ll);
     });
 
-    // Where we sleep stays on the map whichever day is selected — it is the
-    // thing you orient the rest of the day against.
-    const stays = L.layerGroup().addTo(map);
-    data.hotels.forEach((o) => {
-      L.marker(o.ll, {
+    // A stay shows on the days you actually sleep there: the Naha room is not
+    // on the map while you're still in Onna.
+    const stays = data.hotels.map((o) => ({
+      days: o.d,
+      ll: o.ll,
+      marker: L.marker(o.ll, {
         icon: L.divIcon({ className: '', iconSize: [26, 26], iconAnchor: [13, 13], html: '<div class="pin sq">숙</div>' }),
         zIndexOffset: 500,
-      })
-        .addTo(stays)
-        .bindPopup(popup(o));
-    });
+      }).bindPopup(popup(o)),
+    }));
 
     const days = Object.keys(layers);
+    const staysFor = (d: string) => stays.filter((s) => d === 'all' || s.days.includes(d));
     const boundsOf = (d: string) =>
-      L.latLngBounds(d === 'all' ? days.flatMap((k) => pts[k]) : pts[d] || []).pad(0.12);
+      L.latLngBounds([
+        ...(d === 'all' ? days.flatMap((k) => pts[k]) : pts[d] || []),
+        ...staysFor(d).map((s) => s.ll),
+      ]).pad(0.12);
 
     let current = 'all';
     let sized = mapEl.clientWidth > 0 && mapEl.clientHeight > 0;
@@ -123,6 +126,10 @@ const mapData = {
       days.forEach((d) => {
         const on = day === 'all' || d === day;
         if (on) layers[d].addTo(map); else map.removeLayer(layers[d]);
+      });
+      stays.forEach((s) => {
+        if (day === 'all' || s.days.includes(day)) s.marker.addTo(map);
+        else map.removeLayer(s.marker);
       });
       document.querySelectorAll<HTMLButtonElement>('#maplegend .lg').forEach((b) => {
         const on = b.dataset.day === day;

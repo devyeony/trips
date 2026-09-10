@@ -321,12 +321,14 @@ export const okinawa2026: Trip = {
     ],
     hotels: [
       {
+        d: ["d1", "d2", "d3"],
         ll: HOTEL1,
         name: "에어비앤비 (온나손 야마다)",
         t: "1·2박",
         desc: "170-9 Yamada, Onna. 58번 국도변. 마에다 항구 8분, 만좌모 20분, 챠탄 25분, 츄라우미 1시간 15분.",
       },
       {
+        d: ["d3", "d4"],
         ll: HOTEL2,
         name: "컴포트 호텔 나하 겐초마에",
         t: "3박",
