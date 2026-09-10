@@ -94,10 +94,6 @@ h1,h2,h3,h4{text-wrap:balance;margin:0}
 .dayhead h2{font-family:var(--disp);font-weight:700;
   font-size:calc(clamp(23px,4.6vw,31px) * var(--s));line-height:1.32;margin:0 0 10px}
 .dayhead .date{font-size:calc(14.5px * var(--s));color:var(--muted);margin:0 0 16px}
-.daysum{background:var(--paper);border:1px solid var(--line-soft);
-  border-left:4px solid var(--lagoon);padding:16px 18px;
-  font-size:calc(16.5px * var(--s));line-height:1.85;max-width:60ch;margin-bottom:18px}
-.daysum b{font-weight:700}
 .stats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
 .stats span{font-size:calc(14px * var(--s));color:var(--ink);
   background:var(--paper);border:1px solid var(--line-soft);padding:8px 12px;border-radius:3px}
@@ -166,8 +162,6 @@ details[open] .lbl-close{display:inline}
   font-size:calc(16.5px * var(--s));line-height:1.85;color:var(--ink)}
 .prose li,.lst li{margin-bottom:10px}
 .prose li b,.lst li b{font-weight:700}
-.whybox{margin:0 0 18px;max-width:60ch}
-.whybox .accbody .prose{max-width:none}
 
 .drive{position:relative;padding:2px 0 14px 24px}
 .drive::before{content:"";position:absolute;left:-5px;top:9px;width:8px;height:8px;
@@ -247,8 +241,7 @@ summary.acchead:hover{background:rgba(23,150,143,.045)}
   .accbody{padding:0 16px 16px}
   summary.acchead{padding:16px}
   .prose{max-width:none}
-  .daysum{max-width:none}
-  .views button{padding:13px 11px;font-size:calc(16px * var(--s))}
+    .views button{padding:13px 11px;font-size:calc(16px * var(--s))}
   .dirlinks{grid-template-columns:1fr}
 }
 @media(max-width:380px){

@@ -74,11 +74,13 @@ export interface Day {
   date: string;           // "9월 27일 (일) · 나하 → ..."
   tab: { d: string; w: string };  // date-tab face: { d: "9/20", w: "일" }
   colour: string;         // day colour, shared with the map pins
-  summary: string;        // HTML - 2-3 sentences in the day header
   stats: { k: string; value?: string; load?: Load }[];
   timeline: TimelineEntry[];
-  note?: string;          // HTML - "이 날을 이렇게 짠 이유", collapsed
 }
+
+// There is deliberately no day-level summary or note. Anything that would
+// have gone in one belongs to the stop it is about - a reader looking at
+// 07:00 should not have to scroll back up to learn the beach has no showers.
 
 /** A card in a grid (stay / plan B). */
 export interface Card {

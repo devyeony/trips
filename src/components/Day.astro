@@ -1,7 +1,6 @@
 ---
 import type { Day } from '../data/types';
 import Stop from './Stop.astro';
-import Accordion from './Accordion.astro';
 
 interface Props { day: Day; index: number; }
 const { day, index } = Astro.props;
@@ -12,18 +11,6 @@ const { day, index } = Astro.props;
     <h2>{day.title}</h2>
     <p class="date">{day.date}</p>
   </div>
-
-  <div class="daysum" set:html={day.summary} />
-
-  {day.note && (
-    <Accordion
-      k="이 날을 이렇게 짠 이유"
-      v="순서를 정한 근거와, 밀렸을 때 접는 순서"
-      extraClass="whybox"
-    >
-      <div class="prose" set:html={day.note} />
-    </Accordion>
-  )}
 
   <div class="stats">
     {day.stats.map((s) => (
