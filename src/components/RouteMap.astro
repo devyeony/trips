@@ -110,7 +110,21 @@ const mapData = {
 
     let all: [number, number][] = [];
     data.routes.forEach((r) => { all = all.concat(r.pts); });
-    map.fitBounds(L.latLngBounds(all).pad(0.12));
+    const bounds = L.latLngBounds(all).pad(0.12);
+    map.fitBounds(bounds);
+
+    // The map lives in a tab panel, so it is display:none at load and Leaflet
+    // measures the container as 0x0 — fitBounds then lands on the whole world.
+    // Re-fit the first time it actually has a size; afterwards only re-measure,
+    // so a resize doesn't throw away a zoom the reader chose.
+    let hadSize = mapEl.clientWidth > 0 && mapEl.clientHeight > 0;
+    new ResizeObserver(() => {
+      const sized = mapEl.clientWidth > 0 && mapEl.clientHeight > 0;
+      if (!sized) return;
+      map.invalidateSize();
+      if (!hadSize) map.fitBounds(bounds);
+      hadSize = true;
+    }).observe(mapEl);
   } else if (mapEl) {
     mapEl.innerHTML =
       '<div style="padding:24px;font-size:14px;color:#5D7683">지도를 불러오지 못했습니다. 인터넷 연결을 확인하거나 아래 날짜별 버튼으로 구글 지도를 여세요.</div>';

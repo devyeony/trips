@@ -162,22 +162,6 @@ details[open] .lbl-close{display:inline}
   background:var(--sand);border:1.5px dashed var(--muted);border-radius:50%}
 .drive span{font-size:calc(13.5px * var(--s));color:var(--muted);line-height:1.6}
 
-/* ─── map view ──────────────────────────────────────────────────────── */
-.panel{background:var(--paper);border:1px solid var(--line-soft);padding:20px;margin-top:26px;border-radius:3px}
-.maplegend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;
-  margin-top:18px;font-size:calc(14.5px * var(--s));color:var(--ink)}
-.maplegend span{display:flex;align-items:center;gap:8px}
-.maplegend i{width:22px;height:4px;border-radius:2px;display:block}
-.mapnote{font-size:calc(14.5px * var(--s));color:var(--muted);text-align:center;
-  margin:16px auto 0;max-width:52ch;line-height:1.75}
-.dirlinks{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:20px}
-.dirlinks a{display:block;background:var(--sand);border:1.5px solid var(--line-soft);
-  border-radius:3px;padding:14px 16px;text-decoration:none;color:var(--ink);
-  font-size:calc(15.5px * var(--s));transition:.15s;min-height:56px}
-.dirlinks a:hover{border-color:var(--lagoon)}
-.dirlinks a b{display:block;font-family:var(--mono);font-size:calc(12px * var(--s));
-  letter-spacing:.1em;color:var(--lagoon);margin-bottom:4px;font-weight:500}
-
 /* ─── info view ─────────────────────────────────────────────────────── */
 .grouphead{border-top:3px solid var(--ink);padding-top:18px;margin-top:34px;margin-bottom:18px}
 .grouphead .no{font-family:var(--mono);font-size:calc(12.5px * var(--s));letter-spacing:.16em;
@@ -200,6 +184,54 @@ summary.acchead:hover{background:rgba(23,150,143,.045)}
 /* ─── 모바일 ─────────────────────────────────────────────────────────
    레일과 시각 거터를 없애고 카드를 화면 폭 전체로 씁니다.
    시각은 카드 안 큰 배지가 됩니다.                                     */
+
+/* ─── map view ───────────────────────────────────────────────────────
+   Restored from the original design — the same paper panel, hairline
+   border and centred legend it had before the card rewrite. Sizes now
+   scale with --s so "큰 글자" reaches the map too, and the panel goes
+   edge to edge on a phone. */
+section.block{padding:34px 0 8px}
+.blockhead{border-top:3px solid var(--ink);padding-top:18px;margin-bottom:24px}
+.blockhead .no{font-family:var(--mono);font-size:calc(12.5px * var(--s));letter-spacing:.16em;
+  color:var(--coral);display:block;margin-bottom:8px;font-weight:500}
+.blockhead h2{font-family:var(--disp);font-weight:700;
+  font-size:calc(clamp(23px,4.6vw,31px) * var(--s));margin:0 0 6px;line-height:1.32}
+
+.mapbox{background:var(--paper);border:1px solid var(--line-soft);padding:20px;border-radius:3px}
+#okmap{width:100%;height:580px;border:1px solid var(--line-soft);background:#DDE6E4}
+.pin{width:24px;height:24px;border-radius:50%;color:#fff;font-family:var(--mono);font-size:11px;
+  font-weight:500;display:flex;align-items:center;justify-content:center;border:2px solid #fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.pin.sq{border-radius:4px;width:26px;height:26px;background:var(--indigo)}
+.leaflet-container{font-family:var(--body)}
+.leaflet-popup-content{font-family:var(--body);font-size:calc(14px * var(--s));margin:12px 14px;line-height:1.65}
+.leaflet-popup-content b{display:block;font-size:calc(15.5px * var(--s));margin-bottom:4px}
+.leaflet-popup-content em{font-family:var(--mono);font-style:normal;font-size:calc(11.5px * var(--s));
+  letter-spacing:.08em;color:var(--lagoon);display:block;margin-bottom:5px}
+
+.maplegend{display:flex;gap:20px;flex-wrap:wrap;margin:16px 0 0;justify-content:center;
+  font-size:calc(14px * var(--s));color:var(--muted)}
+.maplegend span{display:flex;align-items:center;gap:7px}
+.maplegend b{width:22px;height:3px;display:block;border-radius:2px}
+.mapnote{font-size:calc(13.5px * var(--s));color:var(--muted);text-align:center;
+  margin:14px auto 0;max-width:52ch;line-height:1.7}
+
+.dirlinks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:18px}
+.dirlinks a{display:block;background:var(--sand);border:1.5px solid var(--line-soft);border-radius:3px;
+  padding:13px 15px;min-height:56px;text-decoration:none;color:var(--ink);
+  font-size:calc(15px * var(--s));transition:.15s}
+.dirlinks a:hover{border-color:var(--lagoon)}
+.dirlinks a span{display:block;font-family:var(--mono);font-size:calc(11.5px * var(--s));
+  letter-spacing:.1em;color:var(--lagoon);margin-bottom:4px}
+
+/* the four "why this route" cards under the map */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:16px}
+.card{background:var(--paper);border:1px solid var(--line-soft);border-radius:3px;padding:20px}
+.card .kick{font-family:var(--mono);font-size:calc(11.5px * var(--s));letter-spacing:.12em;
+  color:var(--lagoon);margin:0 0 10px}
+.card h4{margin:0 0 7px;font-size:calc(17px * var(--s));font-weight:700;line-height:1.4}
+.card p{margin:0;font-size:calc(15px * var(--s));color:var(--muted);line-height:1.7}
+
 [hidden]{display:none !important}
 
 /* Tab behaviour lives behind .js, which <head> sets before first paint.
@@ -247,7 +279,12 @@ summary.acchead:hover{background:rgba(23,150,143,.045)}
   summary.acchead{padding:16px}
   .prose{max-width:none}
     .views button{padding:13px 11px;font-size:calc(16px * var(--s))}
+  .mapbox{padding:12px}
+  #okmap{height:min(66vh,460px)}
+  .maplegend{gap:14px;justify-content:flex-start}
   .dirlinks{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+  .card{padding:16px}
 }
 @media(max-width:380px){
   .daytabs{gap:4px}

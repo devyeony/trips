@@ -76,8 +76,6 @@ const { trip } = Astro.props;
       });
       $<HTMLElement>('#daytabs')?.classList.toggle('on', name === 'plan');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      // Leaflet lays out to a hidden container as 0x0; nudge it once shown.
-      if (name === 'map') window.dispatchEvent(new Event('resize'));
     });
 
     /* ── text size: set once, remembered ───────────────────────────── */
