@@ -27,7 +27,7 @@ const mapData = {
           <b style={`background:${l.color}`}></b>{l.label}
         </button>
       ))}
-      <span class="lg-stay"><b></b>숙소</span>
+      <button type="button" class="lg stay" data-day="stay" aria-pressed="false"><b></b>숙소</button>
     </div>
     <ul class="mapnote">
       {map.note.map((line) => <li>{line}</li>)}
@@ -113,10 +113,11 @@ const mapData = {
     }));
 
     const days = Object.keys(layers);
-    const staysFor = (d: string) => stays.filter((s) => d === 'all' || s.days.includes(d));
+    const staysFor = (d: string) =>
+      stays.filter((s) => d === 'all' || d === 'stay' || s.days.includes(d));
     const boundsOf = (d: string) =>
       L.latLngBounds([
-        ...(d === 'all' ? days.flatMap((k) => pts[k]) : pts[d] || []),
+        ...(d === 'all' ? days.flatMap((k) => pts[k]) : d === 'stay' ? [] : pts[d] || []),
         ...staysFor(d).map((s) => s.ll),
       ]).pad(0.12);
 
@@ -129,9 +130,9 @@ const mapData = {
         const on = day === 'all' || d === day;
         if (on) layers[d].addTo(map); else map.removeLayer(layers[d]);
       });
+      const on = staysFor(day);
       stays.forEach((s) => {
-        if (day === 'all' || s.days.includes(day)) s.marker.addTo(map);
-        else map.removeLayer(s.marker);
+        if (on.includes(s)) s.marker.addTo(map); else map.removeLayer(s.marker);
       });
       document.querySelectorAll<HTMLButtonElement>('#maplegend .lg').forEach((b) => {
         const on = b.dataset.day === day;
