@@ -29,6 +29,8 @@ for (const rule of [
   '.js .daytabs{', '.js .daytabs.on{',
   '.mapbox{', '#okmap{', '.pin{', '.leaflet-popup-content{',
   '.tripcard{', '.triplist{', 'footer{', 'main{',
+  // Without this the open pill hovers white-on-white and 접기 disappears.
+  'details[open] summary:hover .more{',
 ]) check(`global.css is missing ${rule}`, css.includes(rule));
 
 // The tab bar has to outrank Leaflet's controls, which sit at 1000.

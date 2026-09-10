@@ -152,7 +152,11 @@ summary.head:hover{background:rgba(23,150,143,.045)}
   background:var(--sand);border:1.5px solid var(--line);border-radius:999px;
   padding:8px 15px;font-size:calc(14px * var(--s));color:var(--ink);
   font-weight:500;white-space:nowrap;transition:.15s}
-summary.head:hover .more{border-color:var(--lagoon);background:#fff}
+/* Hover states are split by open/closed on purpose. summary.head:hover .more
+   outranks details[open] .more, so a single hover rule painted the open pill
+   white while its text stayed white — invisible 접기. */
+details:not([open]) summary:hover .more{border-color:var(--lagoon);background:#fff}
+details[open] summary:hover .more{background:var(--ink);border-color:var(--ink)}
 .more .ic{font-size:calc(12px * var(--s));transition:transform .18s;line-height:1}
 details[open] .more{background:var(--lagoon);border-color:var(--lagoon);color:#fff}
 details[open] .more .ic{transform:rotate(180deg)}
