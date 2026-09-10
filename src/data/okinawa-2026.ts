@@ -26,7 +26,7 @@ export const okinawa2026: Trip = {
         departCode: "ICN 인천",
         arriveTime: "14:00",
         arriveCode: "OKA 나하",
-        flight: "ZE631 · 2h30m",
+        flight: "ZE631 · 2시간 30분",
       },
       {
         label: "오는 날 09.23 (수)",
@@ -34,7 +34,7 @@ export const okinawa2026: Trip = {
         departCode: "OKA 나하",
         arriveTime: "17:35",
         arriveCode: "ICN 인천",
-        flight: "ZE632 · 2h35m",
+        flight: "ZE632 · 2시간 35분",
       },
     ],
   },
