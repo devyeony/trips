@@ -2,9 +2,6 @@
 
 export type LatLng = [number, number];
 
-/** Physical/energy load shown as a 3-segment bar. */
-export type Load = 1 | 2 | 3;
-
 /** Inline tag keys map to the .t-* colour classes in global.css. */
 export type TagKind = 'sea' | 'in' | 'opt' | 'eat' | 'me' | 'par';
 
@@ -45,7 +42,6 @@ export interface Stop {
   summary: string;        // always visible - one line, ~40 chars, no bold
   tags?: Tag[];
   duration?: string;      // "1시간 15분"
-  load?: Load;            // rendered as a word, not a bar
   key?: boolean;          // the plan hinges on this one
   facts?: Fact[];         // shown first when expanded
   detail?: string;        // HTML string - the original desc
@@ -67,7 +63,7 @@ export interface Day {
   date: string;           // "9월 27일 (일) · 나하 → ..."
   tab: { d: string; w: string };  // date-tab face: { d: "9/20", w: "일" }
   colour: string;         // day colour, shared with the map pins
-  stats: { k: string; value?: string; load?: Load }[];
+  stats: { k: string; value: string }[];
   timeline: TimelineEntry[];
 }
 
