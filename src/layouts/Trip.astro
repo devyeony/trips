@@ -77,19 +77,6 @@ const { trip } = Astro.props;
       if (name === 'map') window.dispatchEvent(new Event('resize'));
     });
 
-    /* ── expand / collapse a whole day ─────────────────────────────── */
-    $('#view-plan')?.addEventListener('click', (e) => {
-      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-toggle]');
-      if (!b) return;
-      const day = document.querySelector(`[data-day="${b.dataset.toggle}"]`);
-      if (!day) return;
-      const cards = Array.from(day.querySelectorAll<HTMLDetailsElement>('details.stop'))
-        .filter((c) => c.querySelector('.body'));
-      const opening = b.textContent?.trim() === '전부 펼쳐 보기';
-      cards.forEach((c) => { c.open = Boolean(opening); });
-      b.textContent = opening ? '전부 접기' : '전부 펼쳐 보기';
-    });
-
     /* ── text size: set once, remembered ───────────────────────────── */
     const root = document.documentElement;
     const sizebtn = $<HTMLButtonElement>('#sizebtn');

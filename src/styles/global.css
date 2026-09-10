@@ -99,11 +99,6 @@ h1,h2,h3,h4{text-wrap:balance;margin:0}
   background:var(--paper);border:1px solid var(--line-soft);padding:8px 12px;border-radius:3px}
 .stats span b{color:var(--lagoon);font-weight:600;margin-right:7px}
 
-.tools{display:flex;justify-content:flex-end;margin-bottom:14px}
-.tools button{appearance:none;background:var(--paper);border:1.5px solid var(--line);
-  border-radius:3px;font-family:var(--body);font-size:calc(14px * var(--s));
-  color:var(--ink);padding:10px 16px;min-height:46px;cursor:pointer;transition:.15s;font-weight:500}
-.tools button:hover{border-color:var(--lagoon)}
 
 /* ─── timeline (desktop: rail + time gutter) ────────────────────────── */
 .tl{border-left:2px solid var(--line);margin-left:74px;padding-bottom:8px}
@@ -255,7 +250,7 @@ summary.acchead:hover{background:rgba(23,150,143,.045)}
   html{scroll-behavior:auto}
 }
 @media print{
-  .bar,.proto,.tools{display:none}
+  .bar{display:none}
   .body,.accbody{display:block !important}
   body{background:#fff}
 }

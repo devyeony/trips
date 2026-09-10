@@ -18,10 +18,6 @@ const { day, index } = Astro.props;
     ))}
   </div>
 
-  <div class="tools">
-    <button type="button" data-toggle={day.id}>전부 펼쳐 보기</button>
-  </div>
-
   <div class="tl">
     {day.timeline.map((entry) =>
       entry.kind === 'drive'
