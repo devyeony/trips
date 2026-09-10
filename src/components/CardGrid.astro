@@ -1,25 +1,24 @@
 ---
+// Stay / plan B / shopping, as accordions.
 import type { BlockSection } from '../data/types';
-interface Props { section: BlockSection; extraGridStyle?: string; }
-const { section, extraGridStyle } = Astro.props;
+import Accordion from './Accordion.astro';
+interface Props { section: BlockSection; note?: string; }
+const { section, note } = Astro.props;
 ---
 <section class="block" id={section.id}>
-  <div class="blockhead">
+  <div class="grouphead">
     <span class="no">{section.no}</span>
     <h2>{section.title}</h2>
+    {note && <p>{note}</p>}
   </div>
-  <div class="grid" style={extraGridStyle}>
-    {section.cards.map((card) => (
-      <div class="card">
-        <p class="kick">{card.kick}</p>
-        <h4>{card.title}</h4>
-        {card.body && <p set:html={card.body} />}
-        {card.list && (
-          <ul>
-            {card.list.map((li) => <li set:html={li} />)}
-          </ul>
-        )}
-      </div>
-    ))}
-  </div>
+  {section.cards.map((card) => (
+    <Accordion k={card.title} v={card.kick}>
+      {card.body && <div class="prose" set:html={card.body} />}
+      {card.list && (
+        <ul class="lst">
+          {card.list.map((li) => <li set:html={li} />)}
+        </ul>
+      )}
+    </Accordion>
+  ))}
 </section>

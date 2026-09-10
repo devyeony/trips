@@ -1,0 +1,41 @@
+---
+// One stop, as a collapsed card.
+//   collapsed → when · title · summary · tags · duration · 자세히 보기
+//   expanded  → facts table, then the original prose
+import type { Stop } from '../data/types';
+import Tags from './Tags.astro';
+import Facts from './Facts.astro';
+import More from './More.astro';
+
+interface Props { stop: Stop; }
+const { stop } = Astro.props;
+
+// The 3-segment load bar needed a legend to decode. A word doesn't.
+const LOAD_WORD = { 1: '앉아서', 2: '걷기', 3: '물놀이·계단' } as const;
+
+const hasBody = Boolean(stop.facts?.length || stop.detail);
+---
+<div class:list={['row', { key: stop.key }]}>
+  <details class="stop">
+    <summary class="head">
+      <div class="when">{stop.when}</div>
+      <div class="headmain">
+        <p class="ttl">{stop.title}</p>
+        <p class="sum">{stop.summary}</p>
+        <div class="meta">
+          <Tags tags={stop.tags} />
+          {stop.duration && <span class="dur">{stop.duration}</span>}
+          {stop.load && <span class="dur">{LOAD_WORD[stop.load]}</span>}
+          {hasBody && <More />}
+        </div>
+      </div>
+    </summary>
+
+    {hasBody && (
+      <div class="body">
+        {stop.facts?.length && <Facts facts={stop.facts} />}
+        {stop.detail && <div class="prose" set:html={stop.detail} />}
+      </div>
+    )}
+  </details>
+</div>

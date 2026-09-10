@@ -1,5 +1,6 @@
 ---
 import type { Trip } from '../data/types';
+import DayTabs from '../components/DayTabs.astro';
 import '../styles/global.css';
 import 'leaflet/dist/leaflet.css';
 
@@ -20,52 +21,87 @@ const { trip } = Astro.props;
 <body>
   <slot name="hero" />
 
-  <nav>
+  <div class="bar">
     <div class="wrap">
-      <ul>
-        {trip.nav.map((item) => (
-          <li>
-            <a href={item.href}>
-              {item.n && <span class="n">{item.n}</span>}{item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <div class="barrow">
+        <div class="views" role="tablist" aria-label="보기 전환">
+          <button type="button" role="tab" id="tab-plan" aria-controls="view-plan" aria-selected="true">{trip.views.plan}</button>
+          <button type="button" role="tab" id="tab-map"  aria-controls="view-map"  aria-selected="false">{trip.views.map}</button>
+          <button type="button" role="tab" id="tab-info" aria-controls="view-info" aria-selected="false">{trip.views.info}</button>
+        </div>
+        <button class="sizebtn" id="sizebtn" type="button" aria-pressed="false">
+          <b>가</b><span id="sizelabel">큰 글자</span>
+        </button>
+      </div>
+      <DayTabs days={trip.days} />
     </div>
-  </nav>
-
-  <div class="wrap">
-    <slot />
-
-    <footer set:html={trip.footer} />
   </div>
 
-  <!-- Scroll-spy: highlight the nav tab of the section in view -->
+  <main class="wrap">
+    <slot />
+    <footer set:html={trip.footer} />
+  </main>
+
   <script>
-    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('nav a'));
-    const map: Record<string, HTMLAnchorElement> = {};
-    links.forEach((a) => {
-      const el = document.querySelector(a.getAttribute('href') || '');
-      if (el) map[el.id] = a;
-    });
-    if ('IntersectionObserver' in window) {
-      const obs = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              links.forEach((l) => l.classList.remove('on'));
-              const a = map[(e.target as HTMLElement).id];
-              if (a) a.classList.add('on');
-            }
-          });
-        },
-        { rootMargin: '-70px 0px -70% 0px', threshold: 0 }
-      );
-      Object.keys(map).forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) obs.observe(el);
-      });
+    // Everything below is progressive enhancement. Without JS every day and
+    // every view is already in the HTML, and <details> opens natively.
+    const $  = <T extends Element>(s: string) => document.querySelector<T>(s);
+    const $$ = <T extends Element>(s: string) => Array.from(document.querySelectorAll<T>(s));
+
+    /* ── date tabs: show one day at a time ─────────────────────────── */
+    function showDay(id: string) {
+      $$<HTMLElement>('.day').forEach((s) => { s.hidden = s.dataset.day !== id; });
+      $$<HTMLButtonElement>('#daytabs button').forEach((b) =>
+        b.setAttribute('aria-selected', String(b.dataset.day === id)));
     }
+    $('#daytabs')?.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button');
+      if (b?.dataset.day) showDay(b.dataset.day);
+    });
+
+    /* ── top views ─────────────────────────────────────────────────── */
+    const VIEWS = ['plan', 'map', 'info'] as const;
+    $('.views')?.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button');
+      if (!b) return;
+      const name = b.id.replace('tab-', '');
+      VIEWS.forEach((v) => {
+        const panel = document.getElementById('view-' + v);
+        if (panel) panel.hidden = v !== name;
+        document.getElementById('tab-' + v)?.setAttribute('aria-selected', String(v === name));
+      });
+      const tabs = $<HTMLElement>('#daytabs');
+      if (tabs) tabs.hidden = name !== 'plan';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Leaflet lays out to a hidden container as 0x0; nudge it once shown.
+      if (name === 'map') window.dispatchEvent(new Event('resize'));
+    });
+
+    /* ── expand / collapse a whole day ─────────────────────────────── */
+    $('#view-plan')?.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-toggle]');
+      if (!b) return;
+      const day = document.querySelector(`[data-day="${b.dataset.toggle}"]`);
+      if (!day) return;
+      const cards = Array.from(day.querySelectorAll<HTMLDetailsElement>('details.stop'))
+        .filter((c) => c.querySelector('.body'));
+      const opening = b.textContent?.trim() === '전부 펼쳐 보기';
+      cards.forEach((c) => { c.open = Boolean(opening); });
+      b.textContent = opening ? '전부 접기' : '전부 펼쳐 보기';
+    });
+
+    /* ── text size: set once, remembered ───────────────────────────── */
+    const root = document.documentElement;
+    const sizebtn = $<HTMLButtonElement>('#sizebtn');
+    function setBig(on: boolean) {
+      root.classList.toggle('bigtype', on);
+      sizebtn?.setAttribute('aria-pressed', String(on));
+      const label = $('#sizelabel');
+      if (label) label.textContent = on ? '보통 글자' : '큰 글자';
+      try { localStorage.setItem('bigtype', on ? '1' : '0'); } catch { /* private mode */ }
+    }
+    try { if (localStorage.getItem('bigtype') === '1') setBig(true); } catch { /* ignore */ }
+    sizebtn?.addEventListener('click', () => setBig(!root.classList.contains('bigtype')));
   </script>
 </body>
 </html>

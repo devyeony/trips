@@ -8,6 +8,14 @@ export type Load = 1 | 2 | 3;
 /** Inline tag keys map to the .t-* colour classes in global.css. */
 export type TagKind = 'sea' | 'in' | 'opt' | 'eat' | 'me' | 'par';
 
+/** One row of the fact table shown when a stop is expanded.
+ *  Pull these OUT of the prose - address, phone, hours, parking, price are
+ *  what you hunt for on the day, and prose is the worst place to keep them. */
+export interface Fact {
+  k: string;              // short label: "주소" "전화" "영업" "주차" "요금"
+  v: string;              // the fact itself, no sentences
+}
+
 export interface Tag {
   kind: TagKind;
   label: string;
@@ -30,21 +38,24 @@ export interface NavItem {
   n?: string;             // "D1"
 }
 
-/** One entry in the legend box. */
-export type LegendItem =
-  | { type: 'load'; load: Load; label: string }
-  | { type: 'tag'; tags: Tag[]; label: string };
-
-/** A stop on a day's timeline. */
+/** A stop on a day's timeline, rendered as a collapsed card.
+ *
+ *  Collapsed, a reader sees: when · title · summary · tags · duration.
+ *  Expanded, they additionally get `facts` then `detail`.
+ *
+ *  `detail` holds the original prose verbatim - moving it here is a rename,
+ *  not a rewrite. Rewriting loses information; see docs/ui-redesign.md. */
 export interface Stop {
   kind?: 'stop';
   when: string;           // "10:30"
   title: string;
+  summary: string;        // always visible - one line, ~40 chars, no bold
   tags?: Tag[];
-  desc?: string;
-  duration?: string;      // foot: "1시간 15분"
-  load?: Load;            // foot load bar
-  key?: boolean;          // filled (coral) dot
+  duration?: string;      // "1시간 15분"
+  load?: Load;            // rendered as a word, not a bar
+  key?: boolean;          // the plan hinges on this one
+  facts?: Fact[];         // shown first when expanded
+  detail?: string;        // HTML string - the original desc
 }
 
 /** A drive/transition row between stops. */
@@ -55,15 +66,18 @@ export interface Drive {
 
 export type TimelineEntry = Stop | Drive;
 
-/** A day section. */
+/** A day section. One day shows at a time, chosen by the date tabs. */
 export interface Day {
   id: string;             // "d1"
   no: string;             // "DAY 01"
   title: string;
   date: string;           // "9월 27일 (일) · 나하 → ..."
+  tab: { d: string; w: string };  // date-tab face: { d: "9/20", w: "일" }
+  colour: string;         // day colour, shared with the map pins
+  summary: string;        // HTML - 2-3 sentences in the day header
   stats: { k: string; value?: string; load?: Load }[];
   timeline: TimelineEntry[];
-  note?: string;          // HTML string (allows <b>)
+  note?: string;          // HTML - "이 날을 이렇게 짠 이유", collapsed
 }
 
 /** A card in a grid (stay / plan B). */
@@ -74,10 +88,10 @@ export interface Card {
   list?: string[];        // HTML strings
 }
 
-/** A row in the prep checklist. */
+/** A row in the prep checklist, rendered as an accordion. */
 export interface CheckRow {
-  k: string;
-  v: string;              // HTML string
+  k: string;              // accordion heading
+  v: string;              // HTML string, revealed when expanded
 }
 
 /** A "generic" block section with a heading and card grid. */
@@ -95,7 +109,7 @@ export interface MapStop {
   ll: LatLng;
   t: string;              // popup <em> line
   name: string;           // popup <b> line
-  desc?: string;
+  desc?: string;          // ONE line - the full story lives on the stop card
 }
 
 export interface MapHotel {
@@ -141,8 +155,7 @@ export interface Trip {
     sub: string;          // HTML (allows <b>)
     legs: Leg[];
   };
-  nav: NavItem[];
-  legend: { heading: string; items: LegendItem[] };
+  views: { plan: string; map: string; info: string };  // top tab labels
   map: TripMap;
   days: Day[];
   stay: BlockSection;

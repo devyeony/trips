@@ -1,0 +1,18 @@
+---
+// A collapsed row used across the info view and the day's "왜 이렇게 짰나" box.
+// Heading text is deliberately large - this is the layer people scan.
+import More from './More.astro';
+
+interface Props { k: string; v?: string; extraClass?: string; }
+const { k, v, extraClass } = Astro.props;
+---
+<details class:list={['acc', extraClass]}>
+  <summary class="acchead">
+    <div class="k">{k}</div>
+    {v && <div class="v">{v}</div>}
+    <div class="meta"><More /></div>
+  </summary>
+  <div class="accbody">
+    <slot />
+  </div>
+</details>

@@ -1,7 +1,6 @@
 ---
 import Trip from '../layouts/Trip.astro';
 import Hero from '../components/Hero.astro';
-import Legend from '../components/Legend.astro';
 import RouteMap from '../components/RouteMap.astro';
 import Day from '../components/Day.astro';
 import CardGrid from '../components/CardGrid.astro';
@@ -11,10 +10,17 @@ import { okinawa2026 as trip } from '../data/okinawa-2026';
 <Trip trip={trip}>
   <Hero slot="hero" hero={trip.hero} />
 
-  <Legend legend={trip.legend} />
-  <RouteMap map={trip.map} />
-  {trip.days.map((day) => <Day day={day} />)}
-  <CardGrid section={trip.stay} />
-  <Checklist prep={trip.prep} />
-  <CardGrid section={trip.planB} />
+  <div id="view-plan" role="tabpanel" aria-labelledby="tab-plan">
+    {trip.days.map((day, i) => <Day day={day} index={i} />)}
+  </div>
+
+  <div id="view-map" role="tabpanel" aria-labelledby="tab-map" hidden>
+    <RouteMap map={trip.map} />
+  </div>
+
+  <div id="view-info" role="tabpanel" aria-labelledby="tab-info" hidden>
+    <CardGrid section={trip.stay} />
+    <Checklist prep={trip.prep} />
+    <CardGrid section={trip.planB} />
+  </div>
 </Trip>

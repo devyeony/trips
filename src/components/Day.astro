@@ -1,44 +1,45 @@
 ---
 import type { Day } from '../data/types';
-import Load from './Load.astro';
-import Tags from './Tags.astro';
-interface Props { day: Day; }
-const { day } = Astro.props;
+import Stop from './Stop.astro';
+import Accordion from './Accordion.astro';
+
+interface Props { day: Day; index: number; }
+const { day, index } = Astro.props;
 ---
-<section class="day" id={day.id}>
+<section class="day" data-day={day.id} id={day.id} hidden={index !== 0}>
   <div class="dayhead">
-    <div>
-      <span class="no">{day.no}</span>
-      <h2>{day.title}</h2>
-      <p class="date">{day.date}</p>
-    </div>
-    <div class="daystat">
-      {day.stats.map((s) => (
-        <div>
-          <span class="k">{s.k}</span>
-          {s.load ? <Load load={s.load} /> : s.value}
-        </div>
-      ))}
-    </div>
+    <span class="no">{day.no}</span>
+    <h2>{day.title}</h2>
+    <p class="date">{day.date}</p>
   </div>
+
+  <div class="daysum" set:html={day.summary} />
+
+  {day.note && (
+    <Accordion
+      k="이 날을 이렇게 짠 이유"
+      v="순서를 정한 근거와, 밀렸을 때 접는 순서"
+      extraClass="whybox"
+    >
+      <div class="prose" set:html={day.note} />
+    </Accordion>
+  )}
+
+  <div class="stats">
+    {day.stats.map((s) => (
+      <span><b>{s.k}</b>{s.value}</span>
+    ))}
+  </div>
+
+  <div class="tools">
+    <button type="button" data-toggle={day.id}>전부 펼쳐 보기</button>
+  </div>
+
   <div class="tl">
     {day.timeline.map((entry) =>
-      entry.kind === 'drive' ? (
-        <div class="drive"><span>{entry.label}</span></div>
-      ) : (
-        <div class={entry.key ? 'stop key' : 'stop'}>
-          <div class="when">{entry.when}</div>
-          <h4>{entry.title} <Tags tags={entry.tags} /></h4>
-          {entry.desc && <p set:html={entry.desc} />}
-          {(entry.duration || entry.load) && (
-            <div class="foot">
-              {entry.duration && <span>{entry.duration}</span>}
-              {entry.load && <Load load={entry.load} />}
-            </div>
-          )}
-        </div>
-      )
+      entry.kind === 'drive'
+        ? <div class="drive"><span>{entry.label}</span></div>
+        : <Stop stop={entry} />
     )}
   </div>
-  {day.note && <div class="note" set:html={day.note} />}
 </section>

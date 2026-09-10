@@ -7,19 +7,18 @@ const { hero } = Astro.props;
   <div class="wrap">
     <p class="eyebrow">{hero.eyebrow}</p>
     <h1 set:html={hero.heading} />
-    <p class="sub" set:html={hero.sub} />
-    <div class="legs">
+    <div class="keyfacts">
       {hero.legs.map((leg) => (
-        <div class="leg">
+        <div class="kf">
           <div class="lab">{leg.label}</div>
-          <div class="route">
+          <div class="big">
             <span class="t">{leg.departTime}</span>
             <span class="code">{leg.departCode}</span>
-            <span class="dash"></span>
+            <span class="arrow"></span>
             <span class="t">{leg.arriveTime}</span>
             <span class="code">{leg.arriveCode}</span>
-            <span class="fl">{leg.flight}</span>
           </div>
+          <div class="meta">{leg.flight}</div>
         </div>
       ))}
     </div>

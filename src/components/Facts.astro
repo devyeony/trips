@@ -1,0 +1,15 @@
+---
+// The fact table shown at the top of an expanded card.
+// Address, phone, hours, parking, price - the things you hunt for on the day.
+import type { Fact } from '../data/types';
+interface Props { facts: Fact[]; }
+const { facts } = Astro.props;
+---
+<dl class="facts">
+  {facts.map((f) => (
+    <>
+      <dt>{f.k}</dt>
+      <dd>{f.v}</dd>
+    </>
+  ))}
+</dl>
