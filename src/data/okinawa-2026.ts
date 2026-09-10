@@ -118,7 +118,10 @@ export const okinawa2026: Trip = {
       {
         d: "d1",
         n: "5",
-        ll: [26.3158768, 127.7540067],
+        // Depot Island, roughly — the trip text puts it 300m / 4분 walk from
+        // Sunset Beach. It previously reused the beach's exact coordinate,
+        // which drew this pin directly on top of marker 3 and hid it.
+        ll: [26.3155, 127.7556],
         t: "19:25 · 1시간 5분",
         name: "아메리칸 빌리지 · 블루씰 · 불꽃놀이 20:00",
         desc: "현금 4만 엔 — 이 날 유일한 기회입니다",
