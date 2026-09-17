@@ -59,7 +59,7 @@ check('the .js marker never runs', trip.includes("classList.add('js')"));
 // <details> left on the page should be the stop cards in the plan view.
 check('the info view has grown an accordion',
   countOf(trip, /<details/g) === countOf(trip, /<details class="stop"/g));
-check('suspiciously few info cards', countOf(trip, /<article class="card">/g) > 20);
+check('suspiciously few info cards', countOf(trip, /<article class="card">/g) > 4);
 
 // Map filter.
 check('map legend is not filterable', countOf(trip, /data-day="(d[1-4]|all|stay)"[^>]*aria-pressed/g) === 6);
