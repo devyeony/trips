@@ -91,9 +91,9 @@ h1,h2,h3,h4{text-wrap:balance;margin:0}
 .sizebtn b{font-size:calc(17px * var(--s));font-weight:700;margin-right:4px}
 :root.bigtype .sizebtn{background:var(--indigo);border-color:var(--indigo);color:#fff}
 
-/* 날짜 탭 — 4개가 항상 한 줄에 보입니다 (가로 스크롤 없음) */
+/* 날짜 탭 — 며칠이든 항상 한 줄에 보입니다 (가로 스크롤 없음) */
 .daytabs{border-top:1px solid var(--line-soft);display:grid;
-  grid-template-columns:repeat(4,1fr);gap:6px;padding-block:10px}
+  grid-auto-flow:column;grid-auto-columns:1fr;gap:6px;padding-block:10px}
 .daytabs button{appearance:none;background:var(--paper);border:1.5px solid var(--line-soft);
   border-radius:4px;padding:9px 4px 10px;cursor:pointer;min-height:60px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
@@ -225,7 +225,7 @@ section.block{padding:34px 0 8px}
   font-size:calc(clamp(23px,4.6vw,31px) * var(--s));margin:0 0 6px;line-height:1.32}
 
 .mapbox{background:var(--paper);border:1px solid var(--line-soft);padding:20px;border-radius:3px}
-#okmap{width:100%;height:580px;border:1px solid var(--line-soft);background:#DDE6E4}
+.tripmap{width:100%;height:580px;border:1px solid var(--line-soft);background:#DDE6E4}
 .pin{width:24px;height:24px;border-radius:50%;color:#fff;font-family:var(--mono);font-size:11px;
   font-weight:500;display:flex;align-items:center;justify-content:center;border:2px solid #fff;
   box-shadow:0 1px 3px rgba(0,0,0,.35)}
@@ -312,7 +312,7 @@ section.block{padding:34px 0 8px}
     main{padding-bottom:72px}
   .views button{padding:13px 11px;font-size:calc(16px * var(--s))}
   .mapbox{padding:12px}
-  #okmap{height:min(66vh,460px)}
+  .tripmap{height:min(66vh,460px)}
   .maplegend{gap:6px;justify-content:flex-start}
   .maplegend .lg{padding:9px 12px;font-size:calc(14px * var(--s))}
   .dirlinks{grid-template-columns:1fr}

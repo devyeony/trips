@@ -1,4 +1,4 @@
-import type { Trip } from "./types";
+import type { Trip } from "../types";
 
 // Day colours reused by both the map and the legend.
 const C = {

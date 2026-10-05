@@ -4,7 +4,14 @@ import Hero from '../components/Hero.astro';
 import RouteMap from '../components/RouteMap.astro';
 import Day from '../components/Day.astro';
 import Info from '../components/Info.astro';
-import { okinawa2026 as trip } from '../data/okinawa-2026';
+import { trips, type TripEntry } from '../trips';
+
+// One page per folder in src/trips/, at /<slug>/.
+export function getStaticPaths() {
+  return trips.map((entry) => ({ params: { trip: entry.slug }, props: { entry } }));
+}
+
+const { trip } = Astro.props.entry as TripEntry;
 ---
 <Trip trip={trip}>
   <Hero slot="hero" hero={trip.hero} />

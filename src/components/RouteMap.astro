@@ -1,11 +1,12 @@
 ---
-import type { TripMap } from '../data/types';
+import type { TripMap } from '../trips/types';
 interface Props { map: TripMap; }
 const { map } = Astro.props;
 
 // Data the client script needs, serialised into the page.
 const mapData = {
   mapId: map.mapId,
+  center: map.center,
   dayColors: map.dayColors,
   stops: map.stops,
   hotels: map.hotels,
@@ -18,7 +19,7 @@ const mapData = {
     <h2>{map.title}</h2>
   </div>
   <div class="mapbox">
-    <div id={map.mapId} role="application" aria-label={map.ariaLabel}></div>
+    <div id={map.mapId} class="tripmap" role="application" aria-label={map.ariaLabel}></div>
 
     <div class="maplegend" id="maplegend" role="group" aria-label="날짜별로 보기">
       <button type="button" class="lg on" data-day="all" aria-pressed="true">전체</button>
@@ -53,6 +54,7 @@ const mapData = {
   interface MapRoute { d: string; color: string; pts: [number, number][]; }
   interface MapData {
     mapId: string;
+    center?: [number, number];
     dayColors: Record<string, string>;
     stops: MapStop[];
     hotels: MapHotel[];
@@ -121,6 +123,13 @@ const mapData = {
         ...staysFor(d).map((s) => s.ll),
       ]).pad(0.12);
 
+    // A trip still being planned may have no pins yet; fall back to its city.
+    function fit(day: string) {
+      const b = boundsOf(day);
+      if (b.isValid()) map.fitBounds(b);
+      else if (data!.center) map.setView(data!.center, 12);
+    }
+
     let current = 'all';
     let sized = mapEl.clientWidth > 0 && mapEl.clientHeight > 0;
 
@@ -142,8 +151,7 @@ const mapData = {
       // Always set a view: a Leaflet map without one renders nothing at all,
       // not even tiles. While the panel is hidden this lands on the wrong
       // zoom, which the ResizeObserver below corrects once it has a size.
-      const b = boundsOf(day);
-      if (b.isValid()) map.fitBounds(b);
+      fit(day);
     }
 
     show('all');
@@ -160,7 +168,7 @@ const mapData = {
     new ResizeObserver(() => {
       if (!(mapEl.clientWidth > 0 && mapEl.clientHeight > 0)) return;
       map.invalidateSize();
-      if (!sized) { sized = true; map.fitBounds(boundsOf(current)); }
+      if (!sized) { sized = true; fit(current); }
     }).observe(mapEl);
   } else if (mapEl) {
     mapEl.innerHTML =

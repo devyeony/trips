@@ -2,7 +2,7 @@
 
 Travel itineraries built with [Astro](https://astro.build) and published to GitHub Pages.
 
-Each trip is a data file plus shared components, so a new trip means writing content — not re-building the layout, timeline, or map.
+Each trip is a folder of data plus shared components, so a new trip means writing content — not re-building the layout, timeline, or map.
 
 Pages are built for readers in their 60s on a phone: stops are collapsed cards
 you tap to expand, one day shows at a time, and a "큰 글자" control scales the
@@ -14,6 +14,7 @@ degrades to a single scroll containing every day and every section.
 
 | Trip | Dates | Page |
 | --- | --- | --- |
+| Fukuoka | 2027.02.28 – 03.02 · 2박 3일 | [`/fukuoka-2027/`](https://devyeony.github.io/trips/fukuoka-2027/) |
 | Okinawa | 2026.09.20 – 09.23 · 3박 4일 | [`/okinawa-2026/`](https://devyeony.github.io/trips/okinawa-2026/) |
 
 ## Develop
@@ -34,14 +35,16 @@ src/
 │   ├── Facts.astro           # address / phone / hours / parking / price
 │   ├── Info.astro            # one block of the info view — cards, all open
 │   ├── More.astro            # the "자세히 보기" affordance
-│   ├── DayTabs.astro         # four fixed date tabs, never a scroll
+│   ├── DayTabs.astro         # one date tab per day, never a scroll
 │   └── Day, Hero, RouteMap, Tags
-├── data/
+├── trips/
 │   ├── types.ts              # the shape of a trip
-│   └── okinawa-2026.ts       # one trip's content
+│   ├── index.ts              # every trip, newest first — hub cards and pages
+│   ├── okinawa-2026/trip.ts  # one trip's content
+│   └── fukuoka-2027/trip.ts
 └── pages/
     ├── index.astro           # trip hub
-    └── okinawa-2026.astro     # assembles the three views
+    └── [trip].astro          # one page per trip, assembles the three views
 ```
 
 ### Writing a stop
@@ -79,10 +82,12 @@ into the 44-row accordion it replaced:
 
 ## Adding a trip
 
-1. Copy `src/data/okinawa-2026.ts` to `src/data/<trip>.ts` and fill in the content
-2. Copy `src/pages/okinawa-2026.astro` to `src/pages/<trip>.astro`, importing the new data
-3. Add a card to `src/pages/index.astro` and a row to the table above
+1. Create `src/trips/<slug>/trip.ts` — copy `fukuoka-2027/trip.ts` for an empty skeleton, or `okinawa-2026/trip.ts` for a filled-in example
+2. Add it to `src/trips/index.ts` — that gives it a page at `/<slug>/` and a card on the hub
+3. Add it to `TRIPS` in `scripts/check-build.mjs` and a row to the table above
 4. Push to `main` — GitHub Actions builds and deploys automatically
+
+Until the map has pins, `map.center` decides where it looks.
 
 ## Deploy
 

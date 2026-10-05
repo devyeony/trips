@@ -1,4 +1,4 @@
-// Shape of a trip's data. Copy okinawa-2026.ts as a template for new trips.
+// Shape of a trip's data. Each trip lives in src/trips/<slug>/trip.ts.
 
 export type LatLng = [number, number];
 
@@ -126,6 +126,7 @@ export interface TripMap {
   no: string;             // "ROUTE"
   title: string;          // "4일간의 동선"
   mapId: string;          // dom id, "okmap"
+  center?: LatLng;        // where to look while there are no pins yet
   ariaLabel: string;
   dayColors: Record<string, string>;   // { d1:'#E2A32B', ... , stay:'#0E2C3B' }
   legend: { d: string; color: string; label: string }[];
