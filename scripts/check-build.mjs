@@ -25,7 +25,7 @@ const hub = read('index.html');
 // later edit that loses half the stops can't pass unnoticed.
 const TRIPS = {
   'okinawa-2026': { stops: 41, facts: 31, cards: 5 },
-  'fukuoka-2027': { stops: 32, facts: 28, cards: 0 }, // TODO 카드는 지워가며 줄어듭니다
+  'fukuoka-2027': { stops: 34, facts: 29, cards: 0 }, // TODO 카드는 지워가며 줄어듭니다
 };
 
 const failures = [];
