@@ -304,8 +304,11 @@ section.block{padding:34px 0 8px}
   .row.key .when{color:var(--coral);background:rgba(222,82,56,.1)}
 
   /* The time badge and the icons share the top row; the title goes under. */
-  summary.head.has-media{grid-template-areas:"when media" "main main";column-gap:10px}
-  .has-media .when{grid-area:when;justify-self:start}
+  summary.head.has-media{grid-template-areas:"when media" "main main";column-gap:10px;
+    row-gap:14px;align-items:center}
+  .has-media .when{grid-area:when;justify-self:start;margin-bottom:0}
+  /* A thin rule between the icon row and the title keeps them apart. */
+  .has-media .headmain{border-top:1px solid var(--line-soft);padding-top:14px}
   .ttl{font-size:calc(19.5px * var(--s))}
   .sum{font-size:calc(16.5px * var(--s))}
   .more{width:100%;margin-left:0;justify-content:center;padding:12px 15px}
