@@ -15,7 +15,7 @@ export const trips: TripEntry[] = [
   {
     slug: 'fukuoka-2027',
     trip: fukuoka2027,
-    card: { eyebrow: '2027.02.28 – 03.02 (2박 3일)', title: '후쿠오카 여행', sub: '준비 중.' },
+    card: { eyebrow: '2027.02.28 – 03.02 (2박 3일)', title: '후쿠오카 여행', sub: '유후인 1박 + 텐진 1박.' },
   },
   {
     slug: 'okinawa-2026',
