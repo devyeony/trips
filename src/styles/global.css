@@ -138,9 +138,14 @@ summary.head:hover{background:rgba(23,150,143,.045)}
 
 /* YouTube/blog icons sit in the card's top-right corner. A link inside
    <summary> opens the link without toggling the card. */
+/* headmain dissolves into the grid so the meta row (tags · 자세히 보기)
+   spans the full card width and the pill still sits at the right edge. */
 summary.head.has-media{display:grid;grid-template-columns:minmax(0,1fr) auto;
-  grid-template-areas:"main media";column-gap:14px;align-items:start}
-.has-media .headmain{grid-area:main}
+  grid-template-areas:"ttl media" "sum media" "meta meta";column-gap:14px;align-items:start}
+.has-media .headmain{display:contents}
+.has-media .ttl{grid-area:ttl}
+.has-media .sum{grid-area:sum}
+.has-media .meta{grid-area:meta}
 /* The icons share one rounded frame with thin dividers, so three of them
    read as a single control instead of three loose boxes. Each segment is
    still a full 48px target for a parent's thumb. */
@@ -307,11 +312,11 @@ section.block{padding:34px 0 8px}
   .row.key .when{color:var(--coral);background:rgba(222,82,56,.1)}
 
   /* Time badge left, icon group right, one row; the title goes under. */
-  summary.head.has-media{grid-template-areas:"when media" "main main";
-    column-gap:16px;row-gap:14px;align-items:center}
+  summary.head.has-media{grid-template-areas:"when media" "ttl ttl" "sum sum" "meta meta";
+    column-gap:16px;align-items:center}
   .has-media .when{grid-area:when;justify-self:start;margin-bottom:0}
   .has-media .media{justify-self:end}
-  .has-media .headmain{border-top:1px solid var(--line-soft);padding-top:14px}
+  .has-media .ttl{border-top:1px solid var(--line-soft);padding-top:14px;margin-top:14px}
   .ttl{font-size:calc(19.5px * var(--s))}
   .sum{font-size:calc(16.5px * var(--s))}
   .more{width:100%;margin-left:0;justify-content:center;padding:12px 15px}
