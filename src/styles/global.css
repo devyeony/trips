@@ -303,10 +303,12 @@ section.block{padding:34px 0 8px}
     background:rgba(23,150,143,.1);border-radius:3px;padding:4px 10px;margin-bottom:10px}
   .row.key .when{color:var(--coral);background:rgba(222,82,56,.1)}
 
-  /* The time badge and the icons share the top row; the title goes under. */
-  summary.head.has-media{grid-template-areas:"when media" "main main";column-gap:10px;
-    row-gap:14px;align-items:center}
+  /* Time badge on its own line, icons on the next one at the right, so the
+     icons never crowd the time. */
+  summary.head.has-media{grid-template-columns:1fr;grid-template-areas:"when" "media" "main";
+    row-gap:10px}
   .has-media .when{grid-area:when;justify-self:start;margin-bottom:0}
+  .has-media .media{justify-self:end}
   /* A thin rule between the icon row and the title keeps them apart. */
   .has-media .headmain{border-top:1px solid var(--line-soft);padding-top:14px}
   .ttl{font-size:calc(19.5px * var(--s))}
