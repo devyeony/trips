@@ -136,6 +136,17 @@ summary.head{list-style:none;cursor:pointer;padding:16px 18px;min-height:56px}
 summary.head::-webkit-details-marker{display:none}
 summary.head:hover{background:rgba(23,150,143,.045)}
 
+/* YouTube/blog icons sit in the card's top-right corner. A link inside
+   <summary> opens the link without toggling the card. */
+summary.head.has-media{display:grid;grid-template-columns:minmax(0,1fr) auto;
+  grid-template-areas:"main media";column-gap:14px;align-items:start}
+.has-media .headmain{grid-area:main}
+.media{grid-area:media;display:flex;gap:8px}
+/* Parents tap these on a phone, so each is a full 52px target. */
+.lnk{display:grid;place-items:center;flex:none;width:52px;height:52px;
+  background:#fff;border:1.5px solid var(--line);border-radius:12px;transition:.15s}
+.lnk svg{width:36px;height:auto}
+.lnk:hover{border-color:var(--lagoon);transform:translateY(-1px)}
 .ttl{margin:0 0 6px;font-size:calc(19px * var(--s));font-weight:700;line-height:1.42}
 .sum{margin:0;font-size:calc(16px * var(--s));color:var(--muted);line-height:1.65}
 .meta{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px;align-items:center}
@@ -173,6 +184,9 @@ details[open] .lbl-close{display:inline}
   padding:10px 16px 10px 0;border-bottom:1px solid var(--line-soft);line-height:1.65}
 .facts dt:last-of-type,.facts dd:last-of-type{border-bottom:0}
 .prose{font-size:calc(16.5px * var(--s));line-height:1.9;color:var(--ink);max-width:58ch;margin-top:16px}
+/* A long URL is one unbreakable word; without this it runs off a phone screen. */
+.prose,.facts dd,.lst{overflow-wrap:anywhere}
+.prose a{color:var(--lagoon);font-weight:600;text-underline-offset:3px}
 .prose p{margin:0 0 14px}
 .prose p:last-child{margin-bottom:0}
 .prose b{font-weight:700}
@@ -289,6 +303,9 @@ section.block{padding:34px 0 8px}
     background:rgba(23,150,143,.1);border-radius:3px;padding:4px 10px;margin-bottom:10px}
   .row.key .when{color:var(--coral);background:rgba(222,82,56,.1)}
 
+  /* The time badge and the icons share the top row; the title goes under. */
+  summary.head.has-media{grid-template-areas:"when media" "main main";column-gap:10px}
+  .has-media .when{grid-area:when;justify-self:start}
   .ttl{font-size:calc(19.5px * var(--s))}
   .sum{font-size:calc(16.5px * var(--s))}
   .more{width:100%;margin-left:0;justify-content:center;padding:12px 15px}

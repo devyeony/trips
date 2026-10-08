@@ -28,6 +28,14 @@ export interface Leg {
   flight: string;         // "ZE633 · 2h30m"
 }
 
+/** A video or blog post about a stop, shown as a YouTube/blog icon in the
+ *  card's top-right corner so a reader can see what the place looks like. */
+export interface StopLink {
+  kind: 'youtube' | 'blog';
+  url: string;
+  title: string;          // the video or post title, read out as the link's label
+}
+
 /** A stop on a day's timeline, rendered as a collapsed card.
  *
  *  Collapsed, a reader sees: when · title · summary · tags · duration.
@@ -45,6 +53,7 @@ export interface Stop {
   key?: boolean;          // the plan hinges on this one
   facts?: Fact[];         // shown first when expanded
   detail?: string;        // HTML string - the original desc
+  links?: StopLink[];     // icons, top-right of the card
 }
 
 /** A drive/transition row between stops. */

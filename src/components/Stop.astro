@@ -1,6 +1,7 @@
 ---
 // One stop, as a collapsed card.
 //   collapsed → when · title · summary · tags · duration · 자세히 보기
+//               + YouTube/blog icons in the top-right corner
 //   expanded  → facts table, then the original prose
 import type { Stop } from '../trips/types';
 import Tags from './Tags.astro';
@@ -11,10 +12,15 @@ interface Props { stop: Stop; }
 const { stop } = Astro.props;
 
 const hasBody = Boolean(stop.facts?.length || stop.detail);
+
+const links = (stop.links ?? []).map((l) => ({
+  ...l,
+  label: l.kind === 'youtube' ? '유튜브 영상' : '블로그 글',
+}));
 ---
 <div class:list={['row', { key: stop.key }]}>
   <details class="stop">
-    <summary class="head">
+    <summary class:list={['head', { 'has-media': links.length }]}>
       <div class="when">{stop.when}</div>
       <div class="headmain">
         <p class="ttl">{stop.title}</p>
@@ -25,6 +31,27 @@ const hasBody = Boolean(stop.facts?.length || stop.detail);
           {hasBody && <More />}
         </div>
       </div>
+      {links.length > 0 && (
+        <div class="media">
+          {links.map((l) => (
+            <a class:list={['lnk', `lnk-${l.kind}`]} href={l.url} target="_blank" rel="noopener"
+               title={l.title} aria-label={`${l.label}: ${l.title} (새 창)`}>
+              {l.kind === 'youtube' ? (
+                <svg viewBox="0 0 28 20" width="28" height="20" aria-hidden="true">
+                  <rect width="28" height="20" rx="5" fill="#FF0000" />
+                  <path d="M11.2 5.6 18.6 10l-7.4 4.4z" fill="#fff" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 28 28" width="26" height="26" aria-hidden="true">
+                  <rect width="28" height="28" rx="6" fill="#03C75A" />
+                  <text x="14" y="17.6" text-anchor="middle" font-size="9.5" font-weight="800"
+                        font-family="Arial,Helvetica,sans-serif" fill="#fff">blog</text>
+                </svg>
+              )}
+            </a>
+          ))}
+        </div>
+      )}
     </summary>
 
     {hasBody && (
