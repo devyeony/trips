@@ -141,12 +141,15 @@ summary.head:hover{background:rgba(23,150,143,.045)}
 summary.head.has-media{display:grid;grid-template-columns:minmax(0,1fr) auto;
   grid-template-areas:"main media";column-gap:14px;align-items:start}
 .has-media .headmain{grid-area:main}
-.media{grid-area:media;display:flex;gap:8px}
-/* Parents tap these on a phone, so each is a full 52px target. */
-.lnk{display:grid;place-items:center;flex:none;width:52px;height:52px;
-  background:#fff;border:1.5px solid var(--line);border-radius:12px;transition:.15s}
-.lnk svg{width:36px;height:auto}
-.lnk:hover{border-color:var(--lagoon);transform:translateY(-1px)}
+/* The icons share one rounded frame with thin dividers, so three of them
+   read as a single control instead of three loose boxes. Each segment is
+   still a full 48px target for a parent's thumb. */
+.media{grid-area:media;display:flex;background:#fff;border:1.5px solid var(--line);
+  border-radius:12px;overflow:hidden}
+.lnk{display:grid;place-items:center;flex:none;width:48px;height:48px;transition:.15s}
+.lnk + .lnk{border-left:1px solid var(--line-soft)}
+.lnk:hover{background:rgba(23,150,143,.08)}
+.lnk svg{width:32px;height:auto}
 .ttl{margin:0 0 6px;font-size:calc(19px * var(--s));font-weight:700;line-height:1.42}
 .sum{margin:0;font-size:calc(16px * var(--s));color:var(--muted);line-height:1.65}
 .meta{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px;align-items:center}
@@ -303,13 +306,11 @@ section.block{padding:34px 0 8px}
     background:rgba(23,150,143,.1);border-radius:3px;padding:4px 10px;margin-bottom:10px}
   .row.key .when{color:var(--coral);background:rgba(222,82,56,.1)}
 
-  /* Time badge on its own line, icons on the next one at the right, so the
-     icons never crowd the time. */
-  summary.head.has-media{grid-template-columns:1fr;grid-template-areas:"when" "media" "main";
-    row-gap:10px}
+  /* Time badge left, icon group right, one row; the title goes under. */
+  summary.head.has-media{grid-template-areas:"when media" "main main";
+    column-gap:16px;row-gap:14px;align-items:center}
   .has-media .when{grid-area:when;justify-self:start;margin-bottom:0}
   .has-media .media{justify-self:end}
-  /* A thin rule between the icon row and the title keeps them apart. */
   .has-media .headmain{border-top:1px solid var(--line-soft);padding-top:14px}
   .ttl{font-size:calc(19.5px * var(--s))}
   .sum{font-size:calc(16.5px * var(--s))}
